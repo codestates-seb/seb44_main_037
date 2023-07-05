@@ -6,5 +6,7 @@ module.exports = {
   MONGO_URL: process.env.MONGO_URL,
   SECRET_KEY: process.env.SECRET_KEY,
   CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  ACCESS_SECRET:process.env.ACCESS_SECRET,
+  REFRESH_SECRET: process.env.REFRESH_SECRET
 };
