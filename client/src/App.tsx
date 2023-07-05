@@ -1,4 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./App.css";
 
 import ErrorPage from "./components/pages/ErrorPage";
@@ -11,16 +13,24 @@ import ProductRegister from "./components/pages/ProductRegister";
 import UserRegister from "./components/pages/UserRegister";
 import Login from "./components/pages/Login";
 
+axios.defaults.withCredentials = true;
+
 export default function App() {
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(isLogin);
+  }, [isLogin]);
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <General />,
+      element: <General isLogin={isLogin} setIsLogin={setIsLogin} />,
       errorElement: <ErrorPage />,
       children: [
         {
           index: true,
-          element: <Main />,
+          element: <Main isLogin={isLogin} setIsLogin={setIsLogin} />,
         },
         {
           path: "products/new",
@@ -30,19 +40,26 @@ export default function App() {
           path: "products/:id",
           element: <ProductDetail />,
         },
+      ],
+    },
+    {
+      path: "/user",
+      element: <General isLogin={isLogin} setIsLogin={setIsLogin} />,
+      errorElement: <ErrorPage />,
+      children: [
         {
-          path: "user/login",
+          path: "login",
           element: <Login />,
         },
         {
-          path: "user/register",
+          path: "register",
           element: <UserRegister />,
         },
       ],
     },
     {
       path: "/mypage",
-      element: <ForMyPage />,
+      element: <ForMyPage isLogin={isLogin} setIsLogin={setIsLogin} />,
       errorElement: <ErrorPage />,
       children: [
         {

@@ -1,13 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import logoIcon from "../assets/GoodsHub.svg";
+import UserAPI from "../api/user";
+import logoIcon from "../assets/images/GoodsHub.svg";
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 1264px;
   padding: 1.5rem 1rem;
   border-bottom: 1px solid var(--line-gray);
 `;
@@ -24,7 +26,7 @@ const Wrapper = styled.div`
 `;
 
 const Image = styled.img`
-  width: 8rem;
+  height: 1.2rem;
 `;
 
 const BigMenu = styled.div`
@@ -37,9 +39,26 @@ const SmallMenu = styled.div`
   color: #474747;
   font-size: 0.8rem;
   font-weight: bold;
+  cursor: pointer;
 `;
 
-export default function Header() {
+const userAPI = new UserAPI();
+
+type HeaderProps = {
+  isLogin: boolean;
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function Header({ isLogin, setIsLogin }: HeaderProps) {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = async () => {
+    await userAPI.logout();
+
+    setIsLogin(false);
+    navigate("/");
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -53,9 +72,12 @@ export default function Header() {
         </Link>
       </Wrapper>
       <div>
-        <Link to="/user/login">
-          <SmallMenu>로그인/회원가입</SmallMenu>
-        </Link>
+        {!isLogin && (
+          <Link to="/user/login">
+            <SmallMenu>로그인/회원가입</SmallMenu>
+          </Link>
+        )}
+        {isLogin && <SmallMenu onClick={handleLogoutClick}>로그아웃</SmallMenu>}
       </div>
     </Container>
   );
