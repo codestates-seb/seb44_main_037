@@ -3,7 +3,7 @@ const { verifyUserData, generateToken } = require("../helper/authFunctions");
 
 async function issueTokens(req, res, next) {
   try {
-    const user = await verifyUserData(req.email);
+    const user = req.user || await verifyUserData(req.email);
 
     if (!user) {
       return res
@@ -30,7 +30,10 @@ async function issueTokens(req, res, next) {
 
     return res
       .status(200)
-      .send({ result: OK, email: req.email });
+      .send({
+        result: OK,
+        body: { user: req.user }
+      });
   } catch (err) {
     return res
       .status(401)
