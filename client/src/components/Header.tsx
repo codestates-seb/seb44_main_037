@@ -55,6 +55,7 @@ export default function Header({ isLogin, setIsLogin }: HeaderProps) {
   const handleLogoutClick = async () => {
     await userAPI.logout();
 
+    sessionStorage.removeItem("user");
     setIsLogin(false);
     navigate("/");
   };

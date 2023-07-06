@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useInput from "../../hook/useInput";
 
 import UserAPI from "../../api/user";
-import displayImage from "../../utils/displayImage";
+import displayAttachedImage from "../../utils/displayAttachedImage";
 import validateRegister from "../../utils/validateRegister";
 import { EXCESSIVE_IMAGE_SIZE, OK } from "../../constants/messages";
 import exampleImage from "../../assets/images/example_profile.png";
@@ -91,7 +91,7 @@ export default function UserRegister() {
       return;
     }
 
-    displayImage(e, setThumbnail);
+    displayAttachedImage(e, setThumbnail);
     setImageFile(files[0]);
   };
 

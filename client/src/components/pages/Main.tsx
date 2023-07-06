@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import UserAPI from "../../api/user";
-import { FAILED } from "../../constants/messages";
+import { FAILED, OK } from "../../constants/messages";
 import { useNavigate } from "react-router";
 
 const userAPI = new UserAPI();
@@ -27,8 +27,20 @@ export default function Main({ isLogin, setIsLogin }: MainProps) {
       return;
     }
 
-    setIsLogin(true);
+    if (response.result === OK) {
+      setIsLogin(true);
+      sessionStorage.setItem("user", JSON.stringify(response.body.user));
+      return;
+    }
+
+    navigate("/error");
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("user")) {
+      setIsLogin(true);
+    }
+  }, []);
 
   useEffect(() => {
     const url = new URL(window.location.href);

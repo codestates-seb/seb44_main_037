@@ -1,10 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { GOOGLE_CLIENT_ID } from "../../config/envConfig";
 import normalIcon from "../../assets/images/btn_google_signin_light_normal_web.png";
-
-import BigTitle from "../common/BigTitle";
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +18,12 @@ const Container = styled.div`
 const Icon = styled.img`
   width: 12rem;
   cursor: pointer;
+`;
+
+const BigTitle = styled.h1`
+  color: #474747;
+  font-size: 1.7rem;
+  font-weight: bold;
 `;
 
 const Box = styled.div`
@@ -53,7 +58,9 @@ export default function Login() {
 
   return (
     <Container>
-      <BigTitle label="로그인 / 회원가입" />
+      <Link to="/">
+        <BigTitle>로그인 / 회원가입</BigTitle>
+      </Link>
       <Box>
         <Text>
           <div>클릭 한 번으로</div>
