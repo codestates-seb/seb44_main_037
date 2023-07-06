@@ -1,5 +1,6 @@
-const { OK, FAILED } = require("../../../constants/messages");
+const cookieOptions = require("../../../constants/cookieOptions");
 const { verifyUserData, generateToken } = require("../helper/authFunctions");
+const { OK, FAILED } = require("../../../constants/messages");
 
 async function issueTokens(req, res, next) {
   try {
@@ -12,14 +13,6 @@ async function issueTokens(req, res, next) {
     }
 
     const token = generateToken(user, true);
-
-    const cookieOptions = {
-      domain: 'localhost',
-      path: '/',
-      sameSite: 'strict',
-      secure: true,
-      httpOnly: true,
-    };
 
     const expireOption = {
       expires: new Date(Date.now() + 24 * 3600 * 1000 * 7) // 7일
