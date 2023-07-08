@@ -1,0 +1,40 @@
+{
+  "data": {
+    "_id": "",
+    "seller": {
+      "_id": "64a6528a87fed2d8ffb58549",
+      "email": "danohwang00@gmail.com",
+      "nickname": "tester1"
+    },
+    "images": ["https://cdn.shopify.com/s/files/1/2675/9476/products/Untitleddesign_14.jpg?v=1652449393", "https://m.media-amazon.com/images/I/617lPQjhplL._AC_UF894,1000_QL80_.jpg"],
+    "title": "어쩌고 굿즈 경매",
+    "description": "어쩌고 저쩌고... 예 그렇습니다.",
+    "saleType": "general",
+    "price": null,
+    "category": "stuff",
+    "bidInfo": {
+      "instantBidPrice": 43000,
+      "startPrice": 12000,
+      "bidUnit": 2000,
+      "deadline": 1688796036387,
+      "history": [
+        {
+          "bider": {
+            "_id": "64a6528a87fed2d8ffb58549",
+            "email": "danohwang00@gmail.com",
+            "nickname": "tester1"
+          },
+          "bidPrice": 23000
+        },
+        {
+          "bider": {
+            "_id": "64a6528a87fed2d8ffb58549",
+            "email": "danohwang00@gmail.com",
+            "nickname": "tester1"
+          },
+          "bidPrice": 20000
+        }
+      ]
+    }
+  }
+}

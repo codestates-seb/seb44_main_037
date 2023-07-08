@@ -1,0 +1,57 @@
+{
+  "data": [
+    {
+      "_id": "",
+      "seller": {
+        "_id": "64a6528a87fed2d8ffb58549",
+        "email": "danohwang00@gmail.com",
+        "nickname": "tester1"
+      },
+      "images": ["https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954626477.jpg", "https://www.munhak.com/data/book/3554184680_xlk9qdZY_2d11e16396763c1b6a34e994637d3dbb460a321b.jpg"],
+      "title": "십이국기 포스터 판매",
+      "description": "청양의 노래 화집 발간 기념으로 십이국기 시리즈 25,000원 이상 구매 시 알라딘에서 증정했던 일러스트 포스터 2종 세트를 판매합니다. 한 번도 꺼내보지 않은 미개봉 상태입니다.",
+      "saleType": "general",
+      "price": 25000,
+      "bidInfo": null,
+      "category": "stuff"
+    },
+    {
+      "_id": "",
+      "seller": {
+        "_id": "64a6528a87fed2d8ffb58549",
+        "email": "danohwang00@gmail.com",
+        "nickname": "tester1"
+      },
+      "images": ["https://cdn.shopify.com/s/files/1/2675/9476/products/Untitleddesign_14.jpg?v=1652449393", "https://m.media-amazon.com/images/I/617lPQjhplL._AC_UF894,1000_QL80_.jpg"],
+      "title": "어쩌고 굿즈 경매",
+      "description": "어쩌고 저쩌고... 예 그렇습니다.",
+      "saleType": "general",
+      "price": null,
+      "bidInfo": {
+        "instantBidPrice": 43000,
+        "startPrice": 12000,
+        "bidUnit": 2000,
+        "deadline": "2023-07-08T18:25:43.511Z",
+        "history": [
+          {
+            "bider": {
+              "_id": "64a6528a87fed2d8ffb58549",
+              "email": "danohwang00@gmail.com",
+              "nickname": "tester1"
+            },
+            "bidPrice": 23000
+          },
+          {
+            "bider": {
+              "_id": "64a6528a87fed2d8ffb58549",
+              "email": "danohwang00@gmail.com",
+              "nickname": "tester1"
+            },
+            "bidPrice": 20000
+          }
+        ]
+      },
+      "category": "stuff"
+    }
+  ]
+}
