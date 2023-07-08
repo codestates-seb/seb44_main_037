@@ -8,12 +8,20 @@ const HeaderWrapper = styled.div`
   width: 100%;
 `;
 
-const BodyWrapper = styled.div`
+const BodyWrapper = styled(HeaderWrapper)`
+  min-height: 100vh;
+`;
+
+const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  min-height: 100vh;
+`;
+
+const PageContainer = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 type GeneralProps = {
@@ -21,14 +29,18 @@ type GeneralProps = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function General({ isLogin, setIsLogin }: GeneralProps) {
+export default function ForAuth({ isLogin, setIsLogin }: GeneralProps) {
   return (
     <>
       <HeaderWrapper>
         <Header isLogin={isLogin} setIsLogin={setIsLogin} />
       </HeaderWrapper>
       <BodyWrapper>
-        <Outlet />
+        <Body>
+          <PageContainer>
+            <Outlet />
+          </PageContainer>
+        </Body>
       </BodyWrapper>
     </>
   );

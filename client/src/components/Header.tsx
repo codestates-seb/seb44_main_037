@@ -14,15 +14,15 @@ const Container = styled.div`
   border-bottom: 1px solid var(--line-gray);
 `;
 
-const LogoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const Wrapper = styled.div`
   display: flex;
   align-items: end;
   gap: 1rem;
+`;
+
+const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Image = styled.img`
