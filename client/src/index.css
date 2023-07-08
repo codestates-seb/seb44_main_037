@@ -28,6 +28,11 @@ a {
   text-decoration: none;
 }
 
+a:hover, a:visited, a:link, a:active {
+	color: #000;
+	text-decoration: none;
+}
+
 h1, h2, h3 {
 	margin: 0;
 }

@@ -5,6 +5,7 @@ const variables = css`
   --dark-gray: #474747;
   --gray: #828282;
   --line-gray: #ebebeb;
+  --input-gray: #f2f3f6;
   --navy: #344b60;
   --blue: #2a73e1;
   --green: #3eaf7c;
