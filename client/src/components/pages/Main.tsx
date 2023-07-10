@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { FAILED, OK } from "../../constants/messages";
 import UserAPI from "../../api/user";
 import FakeProductAPI from "../../api/fake/fakeProduct";
+import ProductAPI from "../../api/product";
+import { FAILED, OK } from "../../constants/messages";
+import {
+  ALL_KO,
+  categoryList,
+  typeList,
+  statusList,
+} from "../../constants/products";
 import AuctionProductCard from "../main/AuctionProductCard";
 import GeneralProductCard from "../main/GeneralProductCard";
 import SearchBar from "../main/SearchBar";
+import DropDown from "../common/DropDown";
 
 const userAPI = new UserAPI();
-const productAPI = new FakeProductAPI();
 
 const Container = styled.div`
   display: flex;
@@ -62,6 +69,7 @@ const CategoryBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
+  gap: 1rem;
 `;
 
 type MainProps = {
@@ -69,9 +77,16 @@ type MainProps = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// const productAPI = new ProductAPI();
+const productAPI = new FakeProductAPI();
+
 export default function Main({ isLogin, setIsLogin }: MainProps) {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState(ALL_KO);
+  const [selectedType, setSelectedType] = useState(ALL_KO);
+  const [selectedStatus, setSelectedStatus] = useState(ALL_KO);
 
+  const [products, setProducts] = useState<any>([]);
   const [auction, setAuction] = useState<any>({});
   const [general, setGeneral] = useState<any>({});
 
@@ -114,15 +129,34 @@ export default function Main({ isLogin, setIsLogin }: MainProps) {
   }, []);
 
   useEffect(() => {
+    async function fetchData() {
+      const params = {
+        category: selectedCategory,
+        type: selectedType,
+        status: selectedStatus,
+      };
+
+      const response = await productAPI.getAllProducts(params);
+
+      if (response.result !== OK) {
+        navigate("/error");
+        return;
+      }
+
+      setProducts(response.body.data);
+    }
+
+    // fetchData();
+
     const getSingleProduct = async () => {
       const response1 = await productAPI.getSingleAuctionProduct();
       const response2 = await productAPI.getSingleGeneralProduct();
       setAuction(response1.data);
       setGeneral(response2.data);
     };
-
+    console.log(selectedCategory, selectedType, selectedStatus);
     getSingleProduct();
-  }, []);
+  }, [selectedCategory, selectedType, selectedStatus]);
 
   return (
     <>
@@ -135,7 +169,23 @@ export default function Main({ isLogin, setIsLogin }: MainProps) {
           <SearchBarWrapper>
             <SearchBar />
           </SearchBarWrapper>
-          <CategoryBar>카테고리</CategoryBar>
+          <CategoryBar>
+            <DropDown
+              optionList={categoryList}
+              state={selectedCategory}
+              setState={setSelectedCategory}
+            />
+            <DropDown
+              optionList={typeList}
+              state={selectedType}
+              setState={setSelectedType}
+            />
+            <DropDown
+              optionList={statusList}
+              state={selectedStatus}
+              setState={setSelectedStatus}
+            />
+          </CategoryBar>
         </MenuBar>
         <div>
           <AuctionProductCard data={auction} />

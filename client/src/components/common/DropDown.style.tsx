@@ -11,7 +11,9 @@ export const Menu = styled.div`
   right: 0;
   width: 7.5rem;
   padding: 0.5rem auto;
+  background-color: #fff;
   box-shadow: var(--bs-sm);
+  z-index: 1;
 
   li {
     padding: 0.6rem 0.5rem;
