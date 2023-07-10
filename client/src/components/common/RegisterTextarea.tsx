@@ -3,6 +3,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
 `;
 
 const Label = styled.label`
@@ -18,13 +19,14 @@ const InputContainer = styled.div`
   flex-basis: 85%;
 `;
 
-const InputElement = styled.input`
-  width: ${props => props.size || "100%"};
+const Textarea = styled.textarea`
+  width: 100%;
   padding: 14px 15px;
   margin: 2px auto;
   border: 1px solid #dadada;
   border-radius: 6px;
   font-size: 0.9rem;
+  resize: none;
 `;
 
 const Message = styled.p`
@@ -39,7 +41,7 @@ const Description = styled.p`
   color: var(--dark-gray);
 `;
 
-type RegisterInputProps = {
+type RegisterTextareaProps = {
   form: any;
   name: string;
   label: string;
@@ -48,11 +50,9 @@ type RegisterInputProps = {
   description?: string;
   placeholder?: string;
   onBlur?: () => void;
-  size?: any;
-  isReadOnly?: boolean;
 };
 
-function RegisterInput({
+function RegisterTextarea({
   form,
   name,
   label,
@@ -61,23 +61,19 @@ function RegisterInput({
   placeholder,
   onChange,
   onBlur,
-  size,
-  isReadOnly,
-}: RegisterInputProps) {
+}: RegisterTextareaProps) {
   return (
     <Wrapper>
       <Label htmlFor={name}>{label}</Label>
       <InputContainer>
-        <InputElement
+        <Textarea
           id={name}
           name={name}
           value={form[name]}
           onBlur={onBlur}
           onChange={onChange}
-          type={name === "password" ? "password" : "text"}
           placeholder={placeholder}
-          size={size}
-          readOnly={isReadOnly}
+          rows={12}
         />
         <Description>{description}</Description>
         <Message>{message}</Message>
@@ -86,4 +82,4 @@ function RegisterInput({
   );
 }
 
-export default RegisterInput;
+export default RegisterTextarea;

@@ -4,12 +4,20 @@ import {
   categoryRegisterList,
   typeRegisterist,
 } from "../../constants/products";
-import { IMAGE_GUIDE } from "../../constants/info";
+import {
+  DESCRIPTION_GUIDE,
+  IMAGE_GUIDE,
+  TITLE_GUIDE,
+} from "../../constants/info";
 import DropDown from "../common/DropDown";
 import InfoText from "../common/InfoText";
 import ProductImage from "../productRegister/ProductImage";
 import displayAttachedImages from "../../utils/displayAttachedImages";
 import checkFileSize from "../../utils/checkFileSize";
+import useInput from "../../hook/useInput";
+import validateProductRegister from "../../utils/validateProductRegister";
+import RegisterInput from "../common/RegisterInput";
+import RegisterTextarea from "../common/RegisterTextarea";
 
 const Background = styled.div`
   display: flex;
@@ -17,12 +25,13 @@ const Background = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   padding: 1.5rem 1rem;
   background-color: var(--background);
 `;
 
 const BigTitle = styled.h1`
+  margin-top: 5rem;
   color: var(--dark-gray);
   font-size: 1.7rem;
   font-weight: bold;
@@ -56,6 +65,15 @@ export default function ProductRegister() {
   const [imageFiles, setImageFiles] = useState<any>([]);
   const [displayingImages, setDisplayingImages] = useState([]);
 
+  const [form, onChange, reset, setForm] = useInput({
+    title: "",
+    description: "",
+  });
+  const [failureReason, setFailureReason] = useState({
+    title: "",
+    description: "",
+  });
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
 
@@ -78,6 +96,18 @@ export default function ProductRegister() {
     setImageFiles(files);
   };
 
+  const validateForm = () => {
+    const { isValid, failureReason } = validateProductRegister(form);
+
+    if (!isValid) {
+      setFailureReason(failureReason);
+      return false;
+    }
+
+    setFailureReason({ ...failureReason, title: "", description: "" });
+    return true;
+  };
+
   return (
     <Background>
       <BigTitle>판매상품 등록하기</BigTitle>
@@ -97,6 +127,28 @@ export default function ProductRegister() {
         <ProductImage
           imageUrlList={displayingImages}
           handleFileChange={handleFileChange}
+        />
+      </StepBox>
+      <StepBox>
+        <h2>Step 3. 세부 정보 작성하기</h2>
+        <RegisterInput
+          form={form}
+          label={"제목"}
+          name={"title"}
+          onChange={onChange}
+          onBlur={validateForm}
+          message={failureReason["title"]}
+          description={TITLE_GUIDE}
+          size="25rem"
+        />
+        <RegisterTextarea
+          form={form}
+          label={"상품 설명"}
+          name={"description"}
+          onChange={onChange}
+          onBlur={validateForm}
+          message={failureReason["description"]}
+          description={DESCRIPTION_GUIDE}
         />
       </StepBox>
     </Background>

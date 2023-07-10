@@ -49,6 +49,10 @@ button{
 	cursor: pointer;
 }
 
+textarea {
+	style: none;
+}
+
 #root {
 	width: 100%;
 	box-sizing: border-box;
