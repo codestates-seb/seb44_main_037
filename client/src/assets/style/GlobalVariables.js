@@ -4,6 +4,7 @@ const variables = css`
   --black: #000000;
   --dark-gray: #474747;
   --gray: #828282;
+  --dropdown-gray: #d9d9d9;
   --line-gray: #ebebeb;
   --input-gray: #f2f3f6;
   --navy: #344b60;
