@@ -18,9 +18,13 @@ const STUFF_KO = "잡화/소품";
 const DOLL_KO = "인형/피규어";
 const ONSALE_KO = "판매중";
 const NOT_ONSALE_KO = "판매완료";
+
 const categoryList = [ALL_KO, FANZINE_KO, STUFF_KO, DOLL_KO];
 const typeList = [ALL_KO, GENERAL_KO, AUCTION_KO];
 const statusList = [ALL_KO, ONSALE_KO, NOT_ONSALE_KO];
+
+const categoryRegisterList = [FANZINE_KO, STUFF_KO, DOLL_KO];
+const typeRegisterist = [GENERAL_KO, AUCTION_KO];
 
 export {
   GENERAL,
@@ -38,4 +42,6 @@ export {
   ALL_KO,
   typeList,
   statusList,
+  categoryRegisterList,
+  typeRegisterist,
 };

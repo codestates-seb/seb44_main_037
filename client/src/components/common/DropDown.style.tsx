@@ -7,7 +7,7 @@ export const MenuContainer = styled.div`
 export const Menu = styled.div`
   border-radius: 0.3rem;
   position: absolute;
-  top: 2.5rem;
+  top: 2.2rem;
   right: 0;
   width: 7.5rem;
   padding: 0.5rem auto;
@@ -32,8 +32,8 @@ export const MenuTrigger = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 7.5rem;
-  padding: 0.3rem 0 0.3rem 0.5rem;
+  width: 7rem;
+  padding: 0.3rem 0 0.3rem 0;
   border-radius: 0.5rem;
   color: var(--dark-gray);
   font-size: 0.9rem;
