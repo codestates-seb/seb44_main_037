@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const productsRouter = require("./routes/products");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(cors(corsOptions));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/products", productsRouter);
 
 app.use((req, res, next) => {
   next(createError(404));

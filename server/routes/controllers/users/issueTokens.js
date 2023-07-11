@@ -25,7 +25,7 @@ async function issueTokens(req, res, next) {
       .status(200)
       .send({
         result: OK,
-        body: { user: req.user }
+        body: { user }
       });
   } catch (err) {
     return res

@@ -3,25 +3,6 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const bidInfo = mongoose.Schema({
-  instantBidPrice: {
-    type: Number,
-    required: true,
-  },
-  startPrice: {
-    type: Number,
-    required: true,
-  },
-  bidUnit: {
-    type: Number,
-    required: true,
-  },
-  deadline: {
-    type: Number,
-    required: true,
-  }
-});
-
 const history = mongoose.Schema({
   bider: {
     type: ObjectId,
@@ -29,6 +10,10 @@ const history = mongoose.Schema({
   },
   bidPrice: {
     type: Number,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
@@ -40,7 +25,7 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: [true, "Email cannot be blank"],
+    required: [true, "Category cannot be blank"],
     enum: ["fanzine", "stuff", "doll"],
   },
   images: {
@@ -63,11 +48,29 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
   },
-  bidInfo: bidInfo,
+  bidInfo: {
+    instantBidPrice: {
+      type: Number,
+      required: true,
+    },
+    startPrice: {
+      type: Number,
+      required: true,
+    },
+    bidUnit: {
+      type: Number,
+      required: true,
+    },
+    deadline: {
+      type: Number,
+      required: true,
+    }
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   history: [history]
 });
-
-productSchema.set('timestamps', { createdAt: true, updatedAt: false });
-history.set('timestamps', { createdAt: true, updatedAt: false });
 
 module.exports = mongoose.model("Product", productSchema);

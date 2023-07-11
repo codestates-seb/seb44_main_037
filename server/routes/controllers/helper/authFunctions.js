@@ -23,13 +23,13 @@ module.exports = {
 
     let result = {
       accessToken: sign(payload, ACCESS_SECRET, {
-        expiresIn: '1d',
+        expiresIn: "1h",
       }),
     };
 
     if (isLogin) {
       result.refreshToken = sign(payload, REFRESH_SECRET, {
-        expiresIn: '7d',
+        expiresIn: "7d",
       });
     }
 
@@ -52,6 +52,7 @@ module.exports = {
       decoded = verify(token, secretKey);
     } catch (err) {
       console.log(`JWT Error: ${err.message}`);
+      console.log(`JWT Error: ${err.name}`);
       return null;
     }
     return decoded;
