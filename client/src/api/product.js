@@ -36,8 +36,13 @@ export default class ProductAPI {
 
   async registerProduct(body) {
     try {
+      const userId = JSON.parse(sessionStorage.getItem("user"))._id;
       const formData = new FormData();
 
+      body.images.forEach(image => {
+        formData.append("imagesData", image);
+      });
+      formData.append("userId", userId);
       formData.append("title", body.title);
       formData.append("description", body.description);
       formData.append("price", body.price);
@@ -46,10 +51,11 @@ export default class ProductAPI {
       formData.append("bidUnit", body.bidUnit);
       formData.append("saleType", body.saleType);
       formData.append("category", body.category);
+      formData.append("deadline", body.deadline);
 
       const res = await this.#requestRegisterProduct(formData);
 
-      if (res.status !== 200) {
+      if (res.status !== 201) {
         throw createError(res.status);
       }
 

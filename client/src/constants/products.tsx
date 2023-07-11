@@ -25,6 +25,7 @@ const statusList = [ALL_KO, ONSALE_KO, NOT_ONSALE_KO];
 
 const categoryRegisterList = [FANZINE_KO, STUFF_KO, DOLL_KO];
 const typeRegisterist = [GENERAL_KO, AUCTION_KO];
+const deadlineList = ["1", "3", "6", "12", "24"];
 
 export {
   GENERAL,
@@ -49,4 +50,5 @@ export {
   statusList,
   categoryRegisterList,
   typeRegisterist,
+  deadlineList,
 };

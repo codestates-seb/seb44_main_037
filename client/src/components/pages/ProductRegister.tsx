@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import styled from "styled-components";
 import {
   categoryRegisterList,
+  deadlineList,
   typeRegisterist,
 } from "../../constants/products";
 import {
@@ -75,9 +76,10 @@ export default function ProductRegister() {
   const [selectedCategory, setSelectedCategory] = useState(
     categoryRegisterList[0]
   );
-  const [selectedType, setSelectedType] = useState(typeRegisterist[0]);
   const [imageFiles, setImageFiles] = useState<any>([]);
+  const [selectedType, setSelectedType] = useState(typeRegisterist[0]);
   const [displayingImages, setDisplayingImages] = useState([]);
+  const [deadline, setDeadline] = useState<string>(deadlineList[0]);
 
   const [form, onChange, reset, setForm] = useInput({
     title: "",
@@ -153,12 +155,13 @@ export default function ProductRegister() {
         saleType: changeTermsToKorean(selectedType),
         category: changeTermsToKorean(selectedCategory),
         images: imageFiles,
+        deadline,
       };
 
       const response = await productAPI.registerProduct(body);
-
+      console.log(response);
       if (response.result === OK) {
-        navigate("/");
+        navigate(`/products/${response.productId}`);
         return;
       }
 
@@ -269,6 +272,13 @@ export default function ProductRegister() {
               size="15rem"
               isPrice={true}
             />
+            <DropDownWrapper>
+              <DropDown
+                optionList={deadlineList}
+                state={deadline}
+                setState={setDeadline}
+              />
+            </DropDownWrapper>
           </>
         )}
       </StepBox>
