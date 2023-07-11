@@ -24,6 +24,7 @@ import RegisterTextarea from "../common/RegisterTextarea";
 import HalfButton from "../common/HalfButton";
 import ProductImage from "../productRegister/ProductImage";
 import ProductAPI from "../../api/product";
+import changeTermsToKorean from "../../utils/changeTermsToEnglish";
 
 const Background = styled.div`
   display: flex;
@@ -149,6 +150,8 @@ export default function ProductRegister() {
     if (isFormValid && imageFiles.length > 0) {
       const body = {
         ...form,
+        saleType: changeTermsToKorean(selectedType),
+        category: changeTermsToKorean(selectedCategory),
         images: imageFiles,
       };
 

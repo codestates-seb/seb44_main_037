@@ -44,6 +44,8 @@ export default class ProductAPI {
       formData.append("instantBidPrice", body.instantBidPrice);
       formData.append("startPrice", body.startPrice);
       formData.append("bidUnit", body.bidUnit);
+      formData.append("saleType", body.saleType);
+      formData.append("category", body.category);
 
       const res = await this.#requestRegisterProduct(formData);
 
