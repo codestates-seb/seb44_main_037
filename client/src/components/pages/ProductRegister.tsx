@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import {
   categoryRegisterList,
@@ -8,16 +9,21 @@ import {
   DESCRIPTION_GUIDE,
   IMAGE_GUIDE,
   TITLE_GUIDE,
+  PRICE_GUIDE,
 } from "../../constants/info";
-import DropDown from "../common/DropDown";
-import InfoText from "../common/InfoText";
-import ProductImage from "../productRegister/ProductImage";
+import { OK } from "../../constants/messages";
 import displayAttachedImages from "../../utils/displayAttachedImages";
 import checkFileSize from "../../utils/checkFileSize";
-import useInput from "../../hook/useInput";
 import validateProductRegister from "../../utils/validateProductRegister";
+import useInput from "../../hook/useInput";
+
+import DropDown from "../common/DropDown";
+import InfoText from "../common/InfoText";
 import RegisterInput from "../common/RegisterInput";
 import RegisterTextarea from "../common/RegisterTextarea";
+import HalfButton from "../common/HalfButton";
+import ProductImage from "../productRegister/ProductImage";
+import ProductAPI from "../../api/product";
 
 const Background = styled.div`
   display: flex;
@@ -55,7 +61,14 @@ const StepBox = styled.div`
 
 const DropDownWrapper = styled.div`
   display: flex;
+  margin-bottom: 2rem;
 `;
+
+const ButtonBar = styled.div`
+  margin-top: 7rem;
+`;
+
+const productAPI = new ProductAPI();
 
 export default function ProductRegister() {
   const [selectedCategory, setSelectedCategory] = useState(
@@ -68,11 +81,24 @@ export default function ProductRegister() {
   const [form, onChange, reset, setForm] = useInput({
     title: "",
     description: "",
+    price: 0,
+    instantBidPrice: 0,
+    startPrice: 0,
+    bidUnit: 0,
   });
   const [failureReason, setFailureReason] = useState({
     title: "",
     description: "",
+    price: "",
+    instantBidPrice: "",
+    startPrice: "",
+    bidUnit: "",
   });
+
+  const navigate = useNavigate();
+
+  const isGeneralType = selectedType === typeRegisterist[0];
+  const isAuctionType = selectedType === typeRegisterist[1];
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
@@ -104,8 +130,44 @@ export default function ProductRegister() {
       return false;
     }
 
-    setFailureReason({ ...failureReason, title: "", description: "" });
+    setFailureReason({
+      ...failureReason,
+      title: "",
+      description: "",
+      price: "",
+      instantBidPrice: "",
+      startPrice: "",
+      bidUnit: "",
+    });
+
     return true;
+  };
+
+  const handleSubmitClick = async () => {
+    const isFormValid = validateForm();
+
+    if (isFormValid && imageFiles.length > 0) {
+      const body = {
+        ...form,
+        images: imageFiles,
+      };
+
+      const response = await productAPI.registerProduct(body);
+
+      if (response.result === OK) {
+        navigate("/");
+        return;
+      }
+
+      alert("상품 등록에 실패했습니다.");
+      return;
+    }
+
+    alert("잘못된 요청...");
+  };
+
+  const handleCancelClick = () => {
+    navigate("/");
   };
 
   return (
@@ -139,7 +201,6 @@ export default function ProductRegister() {
           onBlur={validateForm}
           message={failureReason["title"]}
           description={TITLE_GUIDE}
-          size="25rem"
         />
         <RegisterTextarea
           form={form}
@@ -151,6 +212,71 @@ export default function ProductRegister() {
           description={DESCRIPTION_GUIDE}
         />
       </StepBox>
+      <StepBox>
+        <h2>Step 4. 판매유형 및 가격 설정하기</h2>
+        <DropDownWrapper>
+          <DropDown
+            optionList={typeRegisterist}
+            state={selectedType}
+            setState={setSelectedType}
+          />
+        </DropDownWrapper>
+        {isGeneralType && (
+          <RegisterInput
+            form={form}
+            label={"가격"}
+            name={"price"}
+            onChange={onChange}
+            onBlur={validateForm}
+            message={failureReason["price"]}
+            size="15rem"
+            isPrice={true}
+          />
+        )}
+        {isAuctionType && (
+          <>
+            <InfoText text={PRICE_GUIDE} />
+            <RegisterInput
+              form={form}
+              label={"즉시 낙찰가"}
+              name={"instantBidPrice"}
+              onChange={onChange}
+              onBlur={validateForm}
+              message={failureReason["instantBidPrice"]}
+              size="15rem"
+              isPrice={true}
+            />
+            <RegisterInput
+              form={form}
+              label={"시작 금액"}
+              name={"startPrice"}
+              onChange={onChange}
+              onBlur={validateForm}
+              message={failureReason["startPrice"]}
+              size="15rem"
+              isPrice={true}
+            />
+            <RegisterInput
+              form={form}
+              label={"입찰 단위"}
+              name={"bidUnit"}
+              onChange={onChange}
+              onBlur={validateForm}
+              message={failureReason["bidUnit"]}
+              size="15rem"
+              isPrice={true}
+            />
+          </>
+        )}
+      </StepBox>
+      <ButtonBar>
+        <HalfButton name="회원가입" onClick={handleSubmitClick} />
+        <HalfButton
+          name="취소하기"
+          onClick={handleCancelClick}
+          backgroundColor="var(--red)"
+        />
+      </ButtonBar>
     </Background>
   );
 }

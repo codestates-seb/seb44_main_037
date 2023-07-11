@@ -1,5 +1,9 @@
+import checkIsNumber from "./checkIsNumber";
+import checkIsValidUnit from "./checkIsValidUnit";
+
 const validateProductRegister = (data: any) => {
-  const { title, description } = data;
+  const { title, description, price, instantBidPrice, startPrice, bidUnit } =
+    data;
   let isValid = false;
 
   const checkTitle = (string: string) => {
@@ -30,11 +34,43 @@ const validateProductRegister = (data: any) => {
     }
   };
 
+  const checkIsNumberPrice = (num: number) => {
+    switch (true) {
+      case checkIsNumber(num):
+        return "숫자를 입력해 주세요.";
+
+      case checkIsValidUnit(num):
+        return "1000원 단위로 입력해 주세요.";
+
+      default:
+        isValid = true;
+        return "";
+    }
+  };
+
+  const checkIsValidUnitPrice = (num: number) => {
+    switch (true) {
+      case checkIsNumber(num):
+        return "숫자를 입력해 주세요.";
+
+      case checkIsValidUnit(num):
+        return "1000원 단위로 입력해 주세요.";
+
+      default:
+        isValid = true;
+        return "";
+    }
+  };
+
   const result = {
     isValid: isValid,
     failureReason: {
       title: checkTitle(title),
       description: checkDescription(description),
+      price: checkIsNumberPrice(price),
+      instantBidPrice: checkIsNumberPrice(instantBidPrice),
+      startPrice: checkIsValidUnitPrice(startPrice),
+      bidUnit: checkIsValidUnitPrice(bidUnit),
     },
   };
 
