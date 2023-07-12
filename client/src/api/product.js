@@ -9,6 +9,27 @@ export default class ProductAPI {
     });
   }
 
+  async getSingleProduct(productId) {
+    try {
+      const res = await this.#searchSingleProduct(productId);
+
+      if (res.status !== 200) {
+        throw createError(res.status);
+      }
+
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async #searchSingleProduct(productId) {
+    return this.httpClient.get(`products/${productId}`).then(res => ({
+      status: res.status,
+      data: res.data,
+    }));
+  }
+
   async getAllProducts(params) {
     try {
       const res = await this.#searchAllProducts(params);

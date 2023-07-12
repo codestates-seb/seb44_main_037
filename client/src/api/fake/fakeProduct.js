@@ -4,7 +4,15 @@ export default class FakeProductAPI {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
 
-  async getSingleGeneralProduct() {
+  async getAllProducts(params) {
+    return this.#searchAllProducts();
+  }
+
+  async #searchAllProducts() {
+    return axios.get("/products/allProducts.json").then(res => res.data);
+  }
+
+  async getSingleGeneralProduct(productId) {
     return this.#searchSingleGeneralProduct();
   }
 

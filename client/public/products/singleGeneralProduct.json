@@ -1,19 +1,32 @@
 {
-  "data": {
-    "_id": "",
+  "result": "ok",
+  "product": {
+    "bidInfo": {
+      "instantBidPrice": 0,
+      "startPrice": 0,
+      "bidUnit": 0,
+      "deadline": 1689128857234
+    },
+    "_id": "64ae01892f827a55051a5f21",
     "seller": {
       "_id": "64a6528a87fed2d8ffb58549",
       "email": "danohwang00@gmail.com",
-      "nickname": "tester1"
+      "nickname": "tester1",
+      "image": "https://blog.kakaocdn.net/dn/cm7Giu/btqDjdOy9ah/uVKVicIWZPqXbKE46Wh1Kk/img.jpg",
+      "salesList": [],
+      "shoppingList": [],
+      "__v": 0
     },
-    "images": ["https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788954626477.jpg", "https://www.munhak.com/data/book/3554184680_xlk9qdZY_2d11e16396763c1b6a34e994637d3dbb460a321b.jpg"],
-    "title": "십이국기 포스터 판매",
-    "description": "청양의 노래 화집 발간 기념으로 십이국기 시리즈 25,000원 이상 구매 시 알라딘에서 증정했던 일러스트 포스터 2종 세트를 판매합니다. 한 번도 꺼내보지 않은 미개봉 상태입니다.",
-    "saleType": "general",
-    "price": 25000,
-    "bidInfo": null,
     "category": "stuff",
-    "createdAt": 1688735573834,
-    "deadline":  1688739173834
+    "images": [
+      "https://pimg.designhouse.co.kr/cms/contents/direct/info_id/42958/1201500064121.jpg"
+    ],
+    "title": "수성의 마녀 특전 볼펜 판매",
+    "description": "2023년 행사에서 받은 수성의 마녀 특전 볼펜입니다. 색상별로 전종 다 있습니다. ",
+    "saleType": "general",
+    "price": 10000,
+    "createdAt": "2023-07-12T01:27:37.234Z",
+    "history": [],
+    "__v": 0
   }
 }
