@@ -1,5 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { FAILED, OK } from "../../constants/messages";
+import UserAPI from "../../api/user";
 import Header from "../Header";
 
 const HeaderWrapper = styled.div`
@@ -21,7 +24,49 @@ type GeneralProps = {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const userAPI = new UserAPI();
+
 export default function General({ isLogin, setIsLogin }: GeneralProps) {
+  const navigate = useNavigate();
+
+  const requestUserData = async (code: string) => {
+    const body = { authorizationCode: code };
+    const response: any = await userAPI.login(body);
+
+    if (response.result === FAILED) {
+      navigate("/user/register", {
+        state: {
+          email: response.email,
+        },
+      });
+
+      return;
+    }
+
+    if (response.result === OK) {
+      setIsLogin(true);
+      sessionStorage.setItem("user", JSON.stringify(response.body.user));
+      return;
+    }
+
+    navigate("/error");
+  };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("user")) {
+      setIsLogin(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get("code");
+
+    if (authorizationCode) {
+      requestUserData(authorizationCode);
+    }
+  }, []);
+
   return (
     <>
       <HeaderWrapper>
