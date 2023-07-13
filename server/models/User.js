@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
   shoppingList: [{
     type: ObjectId,
     ref: "Product",
-  }]
+  }],
+  point: {
+    type: Number,
+    required: [true, "point cannot be blank"],
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

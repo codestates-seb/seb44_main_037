@@ -19,7 +19,8 @@ async function register(req, res, next) {
       image: s3Result.Location,
       nickname: nickname,
       salesList: [],
-      shoppingList: []
+      shoppingList: [],
+      point: 0
     });
 
     req.user = user;
