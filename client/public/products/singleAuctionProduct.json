@@ -1,40 +1,31 @@
 {
-  "data": {
-    "_id": "",
-    "seller": {
+  "result": "ok",
+  "product": {
+    "_id": "64ae3f98d71b663c12ff425e",
+    "seller":{
       "_id": "64a6528a87fed2d8ffb58549",
       "email": "danohwang00@gmail.com",
-      "nickname": "tester1"
+      "nickname": "tester1",
+      "image": "https://blog.kakaocdn.net/dn/cm7Giu/btqDjdOy9ah/uVKVicIWZPqXbKE46Wh1Kk/img.jpg",
+      "salesList": [],
+      "shoppingList": [],
+      "__v": 0
     },
-    "images": ["https://cdn.shopify.com/s/files/1/2675/9476/products/Untitleddesign_14.jpg?v=1652449393", "https://m.media-amazon.com/images/I/617lPQjhplL._AC_UF894,1000_QL80_.jpg"],
-    "title": "어쩌고 굿즈 경매",
-    "description": "어쩌고 저쩌고... 예 그렇습니다.",
-    "saleType": "general",
-    "price": null,
     "category": "stuff",
+    "images": ["https://blog.kakaocdn.net/dn/cm7Giu/btqDjdOy9ah/uVKVicIWZPqXbKE46Wh1Kk/img.jpg","https://pimg.designhouse.co.kr/cms/contents/direct/info_id/42958/1201500064121.jpg"],
+    "title": "십이국기 신간 기념 알라딘 사은품",
+    "description": "9부 출간 이벤트로 알라딘에서 증정했던 클립과 볼펜을 판매합니다.",
+    "saleType": "auction",
+    "price": 0,
+    "isOnSale": true,
     "bidInfo": {
-      "instantBidPrice": 43000,
-      "startPrice": 12000,
-      "bidUnit": 2000,
-      "deadline": 1688796036387,
-      "history": [
-        {
-          "bider": {
-            "_id": "64a6528a87fed2d8ffb58549",
-            "email": "danohwang00@gmail.com",
-            "nickname": "tester1"
-          },
-          "bidPrice": 23000
-        },
-        {
-          "bider": {
-            "_id": "64a6528a87fed2d8ffb58549",
-            "email": "danohwang00@gmail.com",
-            "nickname": "tester1"
-          },
-          "bidPrice": 20000
-        }
-      ]
-    }
+      "instantBidPrice": 15000,
+      "startPrice": 5000,
+      "bidUnit": 1000,
+      "deadline": 1689144744469
+    },
+    "createdAt": "2023-07-12T05:52:24.469Z",
+    "history":[],
+    "__v":0
   }
 }

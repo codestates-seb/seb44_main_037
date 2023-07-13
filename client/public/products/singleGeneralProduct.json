@@ -17,6 +17,7 @@
       "shoppingList": [],
       "__v": 0
     },
+    "isOnSale": true,
     "category": "stuff",
     "images": [
       "https://pimg.designhouse.co.kr/cms/contents/direct/info_id/42958/1201500064121.jpg"

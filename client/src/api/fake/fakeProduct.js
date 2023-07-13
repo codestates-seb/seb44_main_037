@@ -22,7 +22,7 @@ export default class FakeProductAPI {
       .then(res => res.data);
   }
 
-  async getSingleAuctionProduct() {
+  async getSingleAuctionProduct(productId) {
     return this.#searchSingleAuctionProduct();
   }
 
