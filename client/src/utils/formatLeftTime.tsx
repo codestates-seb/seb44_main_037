@@ -10,10 +10,10 @@ const formatLeftTime = (deadline: number, type = ""): string => {
   const second: string | number = leftTime.getSeconds();
 
   if (type === "second") {
-    return `마감까지 ${day}일 ${hour}시간 ${minute}분`;
+    return `마감까지 ${day}일 ${hour}시간 ${minute}분 ${second}초`;
   }
 
-  return `마감까지 ${day}일 ${hour}시간 ${minute}분 ${second}초`;
+  return `마감까지 ${day}일 ${hour}시간 ${minute}분`;
 };
 
 export default formatLeftTime;

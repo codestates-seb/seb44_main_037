@@ -3,5 +3,7 @@ const IMAGE_GUIDE =
 const TITLE_GUIDE = "제목은 5자 이상 40자 이하여야 합니다.";
 const DESCRIPTION_GUIDE = "상품 설명은 10자 이상 300자 이하여야 합니다.";
 const PRICE_GUIDE = "시작 금액과 입찰 단위는 1000원 단위여야 합니다.";
+const BID_GUIDE =
+  "현재 최고 입찰가에 입찰 단위의 배수만큼 더한 금액으로 응찰할 수 있습니다.";
 
-export { IMAGE_GUIDE, TITLE_GUIDE, DESCRIPTION_GUIDE, PRICE_GUIDE };
+export { IMAGE_GUIDE, TITLE_GUIDE, DESCRIPTION_GUIDE, PRICE_GUIDE, BID_GUIDE };

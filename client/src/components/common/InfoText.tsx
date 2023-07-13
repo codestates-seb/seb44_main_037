@@ -4,6 +4,7 @@ import icon from "../../assets/images/info_icon.svg";
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  margin: 0.7rem 0;
 `;
 
 const Text = styled.p`
