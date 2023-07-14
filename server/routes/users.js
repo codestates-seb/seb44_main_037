@@ -6,6 +6,7 @@ const getUserEmail = require("./controllers/users/getUserEmail");
 const issueTokens = require("./controllers/users/issueTokens");
 const logout = require("./controllers/users/logout");
 const register = require("./controllers/users/register");
+const reissueAccessToken = require("./controllers/common/reissueAccessToken");
 const { multerUpload } = require("./controllers/helper/s3Functions");
 
 router.post("/login", getAccessToken, getUserEmail, issueTokens);
@@ -13,5 +14,7 @@ router.post("/login", getAccessToken, getUserEmail, issueTokens);
 router.get("/logout", logout);
 
 router.post("/register", multerUpload.single("imageData"), register, issueTokens);
+
+router.get("/silent-refresh", reissueAccessToken);
 
 module.exports = router;

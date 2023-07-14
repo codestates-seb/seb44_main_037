@@ -24,6 +24,7 @@ const corsOptions = {
   origin: "http://localhost:3000",
   methods: ["GET", "POST", "OPTIONS", "DELETE"],
   credentials: true,
+  exposedHeaders: ["token"]
 };
 
 app.use(cors(corsOptions));

@@ -1,20 +1,26 @@
 const { verifyToken, generateToken } = require("../helper/authFunctions");
-const { NOT_AUTHORIZED } = require("../../../constants/messages");
-const cookieOptions = require("../../../constants/cookieOptions");
+const { INVALID_USER, REFRESH_TOKEN_EXPIRED, FAILED } = require("../../../constants/messages");
 
 const User = require("../../../models/User");
 
 async function checkUserInfo(req, res, next) {
-  const { access_jwt, refresh_jwt } = req.cookies;
+  const { authorization } = req.headers;
+  const accessToken = authorization.split(" ")[1];
+  const { refreshToken } = req.cookies;
 
-  const accessPayload = verifyToken("access", access_jwt);
-  const refreshPayload = verifyToken("refresh", refresh_jwt);
+  const accessPayload = verifyToken("access", accessToken);
+  const refreshPayload = verifyToken("refresh", refreshToken);
 
   if (accessPayload) {
     const user = await User.findOne({ _id: accessPayload.id });
 
     if (!user) {
-      return res.status(401).send(NOT_AUTHORIZED);
+      return res
+        .status(401)
+        .send({
+          result: FAILED,
+          message: INVALID_USER
+        });
     }
 
     req.user = user;
@@ -26,18 +32,28 @@ async function checkUserInfo(req, res, next) {
     const user = await User.findOne({ _id: refreshPayload.id });
 
     if (!user) {
-      return res.status(401).send(NOT_AUTHORIZED);
+      return res
+        .status(401)
+        .send({
+          result: FAILED,
+          message: INVALID_USER
+        });
     }
 
     const { accessToken } = generateToken(user);
 
-    res.cookie("access_jwt", accessToken, cookieOptions);
+    res.header("accessToken", accessToken);
     req.user = user;
 
     return next();
   }
 
-  return res.status(401).send(NOT_AUTHORIZED);
+  return res
+    .status(401)
+    .send({
+      result: FAILED,
+      message: REFRESH_TOKEN_EXPIRED
+    });
 }
 
 module.exports = checkUserInfo;

@@ -12,20 +12,20 @@ async function issueTokens(req, res, next) {
         .send({ result: FAILED, email: req.email });
     }
 
-    const token = generateToken(user, true);
+    const { accessToken, refreshToken } = generateToken(user, true);
 
     const expireOption = {
       expires: new Date(Date.now() + 24 * 3600 * 1000 * 7) // 7일
     };
 
-    res.cookie('access_jwt', token.accessToken, cookieOptions);
-    res.cookie('refresh_jwt', token.refreshToken, { ...cookieOptions, ...expireOption });
+    res.header("token", accessToken);
+    res.cookie("refreshToken", refreshToken, { ...cookieOptions, ...expireOption });
 
     return res
-      .status(200)
+      .status(201)
       .send({
         result: OK,
-        body: { user }
+        payload: { user }
       });
   } catch (err) {
     return res
