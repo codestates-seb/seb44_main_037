@@ -24,16 +24,28 @@ const PageContainer = styled.div`
   height: 100%;
 `;
 
-type GeneralProps = {
+type ForAuthProps = {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function ForAuth({ isLogin, setIsLogin }: GeneralProps) {
+export default function ForAuth({
+  isLogin,
+  setIsLogin,
+  setAccessToken,
+  setUser,
+}: ForAuthProps) {
   return (
     <>
       <HeaderWrapper>
-        <Header isLogin={isLogin} setIsLogin={setIsLogin} />
+        <Header
+          isLogin={isLogin}
+          setIsLogin={setIsLogin}
+          setAccessToken={setAccessToken}
+          setUser={setUser}
+        />
       </HeaderWrapper>
       <BodyWrapper>
         <Body>

@@ -12,7 +12,7 @@ import {
   TITLE_GUIDE,
   PRICE_GUIDE,
 } from "../../constants/info";
-import { OK } from "../../constants/messages";
+import { DEMAND_LOGIN, OK } from "../../constants/messages";
 import displayAttachedImages from "../../utils/displayAttachedImages";
 import checkFileSize from "../../utils/checkFileSize";
 import validateProductRegister from "../../utils/validateProductRegister";
@@ -72,7 +72,17 @@ const ButtonBar = styled.div`
 
 const productAPI = new ProductAPI();
 
-export default function ProductRegister() {
+type ProductRegisterProps = {
+  user: any;
+  accessToken: string;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export default function ProductRegister({
+  user,
+  accessToken,
+  setAccessToken,
+}: ProductRegisterProps) {
   const [selectedCategory, setSelectedCategory] = useState(
     categoryRegisterList[0]
   );
@@ -158,10 +168,23 @@ export default function ProductRegister() {
         deadline,
       };
 
-      const response = await productAPI.registerProduct(body);
-      console.log(response);
+      const response: any = await productAPI.registerProduct(
+        body,
+        user._id,
+        accessToken
+      );
+
       if (response.result === OK) {
-        navigate(`/products/${response.productId}`);
+        if (response.payload.accessToken) {
+          setAccessToken(response.payload.accessToken);
+        }
+
+        navigate(`/products/${response.payload.productId}`);
+        return;
+      }
+
+      if (response.message === DEMAND_LOGIN) {
+        alert("로그인이 필요합니다.");
         return;
       }
 

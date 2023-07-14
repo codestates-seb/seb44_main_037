@@ -13,7 +13,7 @@ export default class UserAPI {
     try {
       const res = await this.#requestLogout();
 
-      if (res.status !== 205) {
+      if (res.status !== 200) {
         throw createError(res.status);
       }
 
@@ -34,11 +34,11 @@ export default class UserAPI {
     try {
       const res = await this.#requestLogin(body);
 
-      if (res.status !== 200) {
+      if (res.status !== 201) {
         throw createError(res.status);
       }
 
-      return res.data;
+      return res;
     } catch (error) {
       return error;
     }
@@ -47,7 +47,8 @@ export default class UserAPI {
   async #requestLogin(body) {
     return this.httpClient.post("users/login", body).then(res => ({
       status: res.status,
-      data: res.data,
+      result: res.data.result,
+      payload: { ...res.data.payload, accessToken: res.headers.get("token") },
     }));
   }
 
@@ -61,11 +62,11 @@ export default class UserAPI {
 
       const res = await this.#requestRegister(formData);
 
-      if (res.status !== 200) {
+      if (res.status !== 201) {
         throw createError(res.status);
       }
 
-      return res.data;
+      return res;
     } catch (error) {
       return error;
     }
@@ -80,7 +81,30 @@ export default class UserAPI {
       })
       .then(res => ({
         status: res.status,
-        data: res.data,
+        result: res.data.result,
+        payload: { ...res.data.payload, accessToken: res.headers.get("token") },
       }));
+  }
+
+  async refreshToken() {
+    try {
+      const res = await this.#requestSilentRefresh();
+
+      if (res.status !== 200) {
+        throw createError(res.status);
+      }
+
+      return res;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async #requestSilentRefresh() {
+    return this.httpClient.get("users/silent-refresh").then(res => ({
+      status: res.status,
+      result: res.data.result,
+      payload: { ...res.data.payload, accessToken: res.headers.get("token") },
+    }));
   }
 }

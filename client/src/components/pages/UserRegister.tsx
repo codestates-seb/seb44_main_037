@@ -51,7 +51,19 @@ const ButtonBar = styled.div`
 
 const userAPI = new UserAPI();
 
-export default function UserRegister() {
+type UserRegisterProps = {
+  isLogin: boolean;
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export default function UserRegister({
+  isLogin,
+  setIsLogin,
+  setAccessToken,
+  setUser,
+}: UserRegisterProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -105,10 +117,13 @@ export default function UserRegister() {
         email: form.email,
       };
 
-      const response = await userAPI.register(body);
+      const response: any = await userAPI.register(body);
 
       if (response.result === OK) {
-        sessionStorage.setItem("user", JSON.stringify(response.body.user));
+        setIsLogin(true);
+        setAccessToken(response.payload.accessToken);
+        setUser(response.payload.user);
+
         navigate("/");
         return;
       }

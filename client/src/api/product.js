@@ -1,5 +1,13 @@
 import axios from "axios";
 import createError from "../utils/createError";
+import {
+  DEMAND_LOGIN,
+  INVALID_BODY,
+  INVALID_USER,
+  OK,
+  REFRESH_TOKEN_EXPIRED,
+  TOKEN_REISSUED,
+} from "../constants/messages";
 
 export default class ProductAPI {
   constructor() {
@@ -55,9 +63,8 @@ export default class ProductAPI {
       }));
   }
 
-  async registerProduct(body) {
+  async registerProduct(body, userId, accessToken) {
     try {
-      const userId = JSON.parse(sessionStorage.getItem("user"))._id;
       const formData = new FormData();
 
       body.images.forEach(image => {
@@ -74,28 +81,65 @@ export default class ProductAPI {
       formData.append("category", body.category);
       formData.append("deadline", body.deadline);
 
-      const res = await this.#requestRegisterProduct(formData);
+      const res = await this.#requestRegisterProduct(formData, accessToken);
 
-      if (res.status !== 201) {
-        throw createError(res.status);
+      if (res.status === 401 && res.message === TOKEN_REISSUED) {
+        const accessToken = res.headers.get("token");
+        const res = await this.#requestRegisterProduct(formData, accessToken);
+
+        if (res.result === OK) {
+          return {
+            status: res.status,
+            result: res.result,
+            payload: { ...res.payload, accessToken },
+          };
+        }
+
+        return {
+          status: res.status,
+          result: res.result,
+          message: DEMAND_LOGIN,
+        };
       }
 
-      return res.data;
+      if (res.status === 401) {
+        return {
+          status: res.status,
+          result: res.result,
+          message: DEMAND_LOGIN,
+        };
+      }
+
+      if (res.status === 400) {
+        return {
+          status: res.status,
+          result: res.result,
+          message: INVALID_BODY,
+        };
+      }
+
+      return {
+        status: res.status,
+        result: res.result,
+        payload: res.payload,
+      };
     } catch (error) {
       return error;
     }
   }
 
-  async #requestRegisterProduct(formData) {
+  async #requestRegisterProduct(formData, accessToken) {
     return this.httpClient
       .post("products/new", formData, {
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
       })
       .then(res => ({
         status: res.status,
-        data: res.data,
+        result: res.data.result,
+        payload: res.data.payload,
       }));
   }
 }

@@ -22,11 +22,18 @@ const BodyWrapper = styled.div`
 type GeneralProps = {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const userAPI = new UserAPI();
 
-export default function General({ isLogin, setIsLogin }: GeneralProps) {
+export default function General({
+  isLogin,
+  setIsLogin,
+  setAccessToken,
+  setUser,
+}: GeneralProps) {
   const navigate = useNavigate();
 
   const requestUserData = async (code: string) => {
@@ -36,7 +43,7 @@ export default function General({ isLogin, setIsLogin }: GeneralProps) {
     if (response.result === FAILED) {
       navigate("/user/register", {
         state: {
-          email: response.email,
+          email: response.payload.email,
         },
       });
 
@@ -45,18 +52,13 @@ export default function General({ isLogin, setIsLogin }: GeneralProps) {
 
     if (response.result === OK) {
       setIsLogin(true);
-      sessionStorage.setItem("user", JSON.stringify(response.body.user));
+      setAccessToken(response.payload.accessToken);
+      setUser(response.payload.user);
+
+      navigate("/");
       return;
     }
-
-    navigate("/error");
   };
-
-  useEffect(() => {
-    if (sessionStorage.getItem("user")) {
-      setIsLogin(true);
-    }
-  }, []);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -70,7 +72,12 @@ export default function General({ isLogin, setIsLogin }: GeneralProps) {
   return (
     <>
       <HeaderWrapper>
-        <Header isLogin={isLogin} setIsLogin={setIsLogin} />
+        <Header
+          isLogin={isLogin}
+          setIsLogin={setIsLogin}
+          setAccessToken={setAccessToken}
+          setUser={setUser}
+        />
       </HeaderWrapper>
       <BodyWrapper>
         <Outlet />

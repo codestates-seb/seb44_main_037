@@ -24,13 +24,25 @@ const PageContainer = styled.div`
 type ForMyPageProps = {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function ForMyPage({ isLogin, setIsLogin }: ForMyPageProps) {
+export default function ForMyPage({
+  isLogin,
+  setIsLogin,
+  setAccessToken,
+  setUser,
+}: ForMyPageProps) {
   return (
     <>
       <HeaderWrapper>
-        <Header isLogin={isLogin} setIsLogin={setIsLogin} />
+        <Header
+          isLogin={isLogin}
+          setIsLogin={setIsLogin}
+          setAccessToken={setAccessToken}
+          setUser={setUser}
+        />
       </HeaderWrapper>
       <BodyWrapper>
         <Body>

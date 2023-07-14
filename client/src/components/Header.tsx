@@ -47,16 +47,25 @@ const userAPI = new UserAPI();
 type HeaderProps = {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Header({ isLogin, setIsLogin }: HeaderProps) {
+export default function Header({
+  isLogin,
+  setIsLogin,
+  setAccessToken,
+  setUser,
+}: HeaderProps) {
   const navigate = useNavigate();
 
   const handleLogoutClick = async () => {
     await userAPI.logout();
 
-    sessionStorage.removeItem("user");
+    setUser(null);
+    setAccessToken("");
     setIsLogin(false);
+
     navigate("/");
   };
 
