@@ -1,4 +1,4 @@
-const { INVALID_REQUEST, UNEXPECTED_ERROR, NO_AUTHORITY_TO_ACCESS, OK } = require("../../../constants/messages");
+const { INVALID_REQUEST, UNEXPECTED_ERROR, OK, NOT_AUTHORIZED } = require("../../../constants/messages");
 const { upload } = require("../helper/s3Functions");
 const Product = require("../../../models/Product");
 const { GENERAL, AUCTION } = require("../../../constants/products");
@@ -36,11 +36,21 @@ async function register(req, res, next) {
     const isInvalid = checkIsInvalid();
 
     if (isInvalid) {
-      throw createError(422, INVALID_REQUEST);
+      return res
+        .status(400)
+        .send({
+          result: FAILED,
+          message: INVALID_REQUEST
+        });
     }
 
     if (String(req.user._id) !== userId) {
-      throw createError(403, NO_AUTHORITY_TO_ACCESS);
+      return res
+        .status(401)
+        .send({
+          result: FAILED,
+          message: NOT_AUTHORIZED
+        });
     }
 
     const promiseList = await req.files.map(async (file) => {
@@ -70,7 +80,10 @@ async function register(req, res, next) {
 
     return res
       .status(201)
-      .send({ result: OK, productId: createdProduct._id });
+      .send({
+        result: OK,
+        payload: { productId: createdProduct._id }
+      });
   } catch (error) {
     if (error.status) {
       next(error);
