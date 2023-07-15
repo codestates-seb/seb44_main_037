@@ -43,6 +43,7 @@ async function checkUserInfo(req, res, next) {
     const { accessToken } = generateToken(user);
 
     res.header("accessToken", accessToken);
+    req.accessToken = accessToken;
     req.user = user;
 
     return next();
