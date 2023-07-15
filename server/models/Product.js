@@ -12,8 +12,7 @@ const history = mongoose.Schema({
     type: Number,
   },
   createdAt: {
-    type: Date,
-    default: Date.now,
+    type: Number,
   },
 });
 
@@ -67,8 +66,12 @@ const productSchema = new mongoose.Schema({
     }
   },
   createdAt: {
-    type: Date,
-    default: Date.now,
+    type: Number,
+    required: true,
+  },
+  isOnSale: {
+    type: Boolean,
+    required: true,
   },
   history: [history]
 });

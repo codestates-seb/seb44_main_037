@@ -69,6 +69,7 @@ async function register(req, res, next) {
       saleType,
       price: Number(price),
       history: [],
+      isOnSale: true,
       bidInfo: {
         instantBidPrice: Number(instantBidPrice),
         startPrice: Number(startPrice),
