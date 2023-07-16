@@ -167,7 +167,11 @@ export default function UserRegister({
             isReadOnly={true}
           />
           <ButtonBar>
-            <HalfButton name="회원가입" onClick={handleSubmitClick} />
+            <HalfButton
+              name="회원가입"
+              onClick={handleSubmitClick}
+              backgroundColor="var(--green)"
+            />
             <HalfButton
               name="취소하기"
               onClick={handleCancelClick}
