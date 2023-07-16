@@ -6,10 +6,20 @@ import AuctionPage from "../ProductDetail/AuctionPage";
 import GeneralPage from "../ProductDetail/GeneralPage";
 import { AUCTION, GENERAL } from "../../constants/products";
 
-// const productAPI = new ProductAPI();
-const productAPI = new FakeProductAPI();
+const productAPI = new ProductAPI();
+// const productAPI = new FakeProductAPI();
 
-export default function ProductDetail() {
+type ProductDetailProps = {
+  user: any;
+  accessToken: string;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export default function ProductDetail({
+  user,
+  accessToken,
+  setAccessToken,
+}: ProductDetailProps) {
   const { id: productId } = useParams();
   const [product, setProduct] = useState<any>(null);
 
@@ -18,11 +28,9 @@ export default function ProductDetail() {
 
   useEffect(() => {
     const getSingleProduct = async () => {
-      // const response = await productAPI.getSingleProduct(productId);
-      const response = await productAPI.getSingleAuctionProduct(productId);
+      const response = await productAPI.getSingleProduct(productId);
 
       setProduct(response.product);
-      console.log(response.product);
     };
 
     getSingleProduct();
@@ -30,8 +38,24 @@ export default function ProductDetail() {
 
   return (
     <>
-      {isAuction && <AuctionPage product={product} />}
-      {isGeneral && <GeneralPage product={product} />}
+      {isAuction && (
+        <AuctionPage
+          product={product}
+          setProduct={setProduct}
+          user={user}
+          accessToken={accessToken}
+          setAccessToken={setAccessToken}
+        />
+      )}
+      {isGeneral && (
+        <GeneralPage
+          product={product}
+          setProduct={setProduct}
+          user={user}
+          accessToken={accessToken}
+          setAccessToken={setAccessToken}
+        />
+      )}
     </>
   );
 }

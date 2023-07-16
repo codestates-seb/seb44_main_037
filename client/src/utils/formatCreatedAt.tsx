@@ -1,8 +1,9 @@
-const formatCreatedAt = (createdAt: string): string => {
+import { KR_TIME_DIFF } from "../constants/time";
+
+const formatCreatedAt = (createdAt: number): string => {
+  const now = Date.now();
   const date = new Date(createdAt);
-  const timestamp = date.getTime();
-  const now: number = Date.now();
-  const timesAgo: Date = new Date(now - timestamp);
+  const timesAgo = new Date(now - createdAt - KR_TIME_DIFF);
 
   const month: string | number = date.getMonth() + 1;
   const day: string | number = date.getDate();
