@@ -1,10 +1,13 @@
+import { KR_TIME_DIFF } from "../constants/time";
+
 const formatLeftTime = (deadline: number, type = ""): string => {
   const now = Date.now();
+
   if (now > deadline) return "마감";
 
-  const leftTime: Date = new Date(deadline - now);
+  const leftTime: Date = new Date(deadline - now - KR_TIME_DIFF);
 
-  const day: string | number = leftTime.getDate();
+  const day: string | number = leftTime.getDate() - 1;
   const hour: string | number = leftTime.getHours();
   const minute: string | number = leftTime.getMinutes();
   const second: string | number = leftTime.getSeconds();

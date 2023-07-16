@@ -1,0 +1,55 @@
+import {
+  DEMAND_LOGIN,
+  INVALID_BODY,
+  OK,
+  TOKEN_REISSUED,
+} from "../constants/messages";
+
+const handleRequestRequiringAuthorization = async (
+  res: any,
+  body: any,
+  memberFunc: any
+) => {
+  if (res.status === 401 && res.message === TOKEN_REISSUED) {
+    const accessToken: any = res.headers.get("token");
+    const response = await memberFunc(body, accessToken);
+
+    if (response.result === OK) {
+      return {
+        status: response.status,
+        result: response.result,
+        payload: { ...response.payload, accessToken },
+      };
+    }
+
+    return {
+      status: response.status,
+      result: response.result,
+      message: DEMAND_LOGIN,
+    };
+  }
+
+  if (res.status === 401) {
+    return {
+      status: res.status,
+      result: res.result,
+      message: DEMAND_LOGIN,
+    };
+  }
+
+  if (res.status === 400) {
+    return {
+      status: res.status,
+      result: res.result,
+      message: INVALID_BODY,
+    };
+  }
+
+  return {
+    status: res.status,
+    result: res.result,
+    payload: res.payload,
+  };
+};
+
+export default handleRequestRequiringAuthorization;
