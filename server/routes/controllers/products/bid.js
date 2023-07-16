@@ -1,7 +1,5 @@
-const { INVALID_REQUEST, UNEXPECTED_ERROR, OK, NOT_AUTHORIZED, INSUFFICIENT_POINT } = require("../../../constants/messages");
-const { upload } = require("../helper/s3Functions");
-const Product = require("../../../models/Product");
-const User = require("../../../models/User");
+const { INVALID_REQUEST, UNEXPECTED_ERROR, OK, INSUFFICIENT_POINT } = require("../../../constants/messages");
+const Product = require("../../../models/Product")
 
 async function bid(req, res, next) {
   const { productId, price } = req.body;
@@ -58,7 +56,11 @@ async function bid(req, res, next) {
       $push: { history: { bider: user._id, bidPrice: price, createdAt: now } }
     }
 
-    const updatedProduct = await Product.findOneAndUpdate(productFilter, productUpdate, { new: true });
+    const updatedProduct = await Product.findOneAndUpdate(
+      productFilter,
+      productUpdate,
+      { new: true }
+    ).populate(["history.bider"]);
 
     return res
       .status(200)
