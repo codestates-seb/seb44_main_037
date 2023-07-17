@@ -27,7 +27,14 @@ const userSchema = new mongoose.Schema({
   point: {
     type: Number,
     required: [true, "point cannot be blank"],
-  }
+  },
+  pointHistory: [{
+    title: String,
+    productId: ObjectId,
+    price: Number,
+    balance: Number,
+    createdAt: Number,
+  }],
 });
 
 module.exports = mongoose.model("User", userSchema);

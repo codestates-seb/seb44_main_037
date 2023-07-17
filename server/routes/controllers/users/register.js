@@ -20,7 +20,13 @@ async function register(req, res, next) {
       nickname: nickname,
       salesList: [],
       shoppingList: [],
-      point: 0
+      point: 10000,
+      pointHistory: [{
+        title: "가입 축하 포인트",
+        Price: 10000,
+        balance: 10000,
+        createdAt: Date.now(),
+      }]
     });
 
     req.user = user;

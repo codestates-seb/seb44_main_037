@@ -42,17 +42,33 @@ async function buy(req, res, next) {
 
     const buyerFilter = { _id: user._id };
     const buyerUpdate = {
-      point: user.point - product.price,
-      $push: { shoppingList: productId }
-    }
+      point: user.point + product.price,
+      $push: {
+        shoppingList: productId,
+        pointHistory: {
+          title: `${product.title.substring(0, 8).trim()}... 구매`,
+          price: product.price,
+          balance: user.point + product.price,
+          createdAt: Date.now(),
+        }
+      }
+    };
 
     await User.findOneAndUpdate(buyerFilter, buyerUpdate);
 
     const sellerFilter = { _id: product.seller._id };
     const sellerUpdate = {
       point: user.point + product.price,
-      $push: { salesList: productId }
-    }
+      $push: {
+        salesList: productId,
+        pointHistory: {
+          title: `${product.title.substring(0, 8).trim()}... 판매`,
+          price: product.price,
+          balance: user.point - product.price,
+          createdAt: Date.now(),
+        }
+      }
+    };
 
     await User.findOneAndUpdate(sellerFilter, sellerUpdate);
 

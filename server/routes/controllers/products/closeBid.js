@@ -38,17 +38,33 @@ async function closeBid(req, res, next) {
 
     const buyerFilter = { _id: latestBid.bider._id };
     const buyerUpdate = {
-      point: user.point - product.bidInfo.instantBidPrice,
-      $push: { shoppingList: productId }
-    }
+      point: user.point - latestBid.bidPrice,
+      $push: {
+        shoppingList: productId,
+        pointHistory: {
+          title: `${product.title.substring(0, 8).trim()}... 구매`,
+          price: latestBid.bidPrice,
+          balance: user.point - latestBid.bidPrice,
+          createdAt: Date.now(),
+        }
+      }
+    };
 
     await User.findOneAndUpdate(buyerFilter, buyerUpdate);
 
     const sellerFilter = { _id: product.seller._id };
     const sellerUpdate = {
-      point: user.point + product.bidInfo.instantBidPrice,
-      $push: { salesList: productId }
-    }
+      point: user.point + latestBid.bidPrice,
+      $push: {
+        salesList: productId,
+        pointHistory: {
+          title: `${product.title.substring(0, 8).trim()}... 판매`,
+          price: latestBid.bidPrice,
+          balance: user.point + latestBid.bidPrice,
+          createdAt: Date.now(),
+        }
+      }
+    };
 
     await User.findOneAndUpdate(sellerFilter, sellerUpdate);
 

@@ -31,7 +31,9 @@ async function checkUserInfo(req, res, next) {
   }
 
   if (refreshPayload) {
-    const user = await User.findOne({ _id: refreshPayload.id });
+    const user = await User
+      .findOne({ _id: refreshPayload.id })
+      .populate(["salesList", "shoppingList"]);
 
     if (!user) {
       return res
