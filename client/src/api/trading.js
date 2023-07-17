@@ -11,11 +11,11 @@ export default class TradingAPI {
 
   async buy(body, accessToken) {
     try {
-      const res = await this.#requestBuy(body, accessToken);
+      const res = await this.#requestBuy(accessToken, body);
       const result = await handleRequestRequiringAuthorization(
         res,
-        body,
-        this.#requestBuy
+        this.#requestBuy,
+        body
       );
 
       return result;
@@ -24,7 +24,7 @@ export default class TradingAPI {
     }
   }
 
-  async #requestBuy(body, accessToken) {
+  async #requestBuy(accessToken, body) {
     return this.httpClient
       .post("products/buy", body, {
         headers: {
@@ -45,11 +45,11 @@ export default class TradingAPI {
 
   async bid(body, accessToken) {
     try {
-      const res = await this.#requestBid(body, accessToken);
+      const res = await this.#requestBid(accessToken, body);
       const result = await handleRequestRequiringAuthorization(
         res,
-        body,
-        this.#requestBid
+        this.#requestBid,
+        body
       );
 
       return result;
@@ -58,7 +58,7 @@ export default class TradingAPI {
     }
   }
 
-  async #requestBid(body, accessToken) {
+  async #requestBid(accessToken, body) {
     return this.httpClient
       .post("products/bid", body, {
         headers: {
@@ -79,11 +79,11 @@ export default class TradingAPI {
 
   async bidInstantly(body, accessToken) {
     try {
-      const res = await this.#requestInstantBid(body, accessToken);
+      const res = await this.#requestInstantBid(accessToken, body);
       const result = await handleRequestRequiringAuthorization(
         res,
-        body,
-        this.#requestInstantBid
+        this.#requestInstantBid,
+        body
       );
 
       return result;
@@ -92,7 +92,7 @@ export default class TradingAPI {
     }
   }
 
-  async #requestInstantBid(body, accessToken) {
+  async #requestInstantBid(accessToken, body) {
     return this.httpClient
       .post("products/bid/instant", body, {
         headers: {
@@ -113,11 +113,11 @@ export default class TradingAPI {
 
   async closeBid(body, accessToken) {
     try {
-      const res = await this.#requestCloseBid(body, accessToken);
+      const res = await this.#requestCloseBid(accessToken, body);
       const result = await handleRequestRequiringAuthorization(
         res,
-        body,
-        this.#requestCloseBid
+        this.#requestCloseBid,
+        body
       );
 
       return result;
@@ -126,7 +126,7 @@ export default class TradingAPI {
     }
   }
 
-  async #requestCloseBid(body, accessToken) {
+  async #requestCloseBid(accessToken, body) {
     return this.httpClient
       .post("products/bid/close", body, {
         headers: {
