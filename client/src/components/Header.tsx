@@ -11,7 +11,6 @@ const Container = styled.div`
   justify-content: space-between;
   width: 1264px;
   padding: 1.5rem 1rem;
-  border-bottom: 1px solid var(--line-gray);
 `;
 
 const Wrapper = styled.div`
@@ -81,14 +80,19 @@ export default function Header({
           <BigMenu>판매하기</BigMenu>
         </Link>
       </Wrapper>
-      <div>
+      <Wrapper>
         {!isLogin && (
           <Link to="/user/login">
             <SmallMenu>로그인/회원가입</SmallMenu>
           </Link>
         )}
+        {isLogin && (
+          <Link to="/mypage">
+            <SmallMenu>마이페이지</SmallMenu>
+          </Link>
+        )}
         {isLogin && <SmallMenu onClick={handleLogoutClick}>로그아웃</SmallMenu>}
-      </div>
+      </Wrapper>
     </Container>
   );
 }

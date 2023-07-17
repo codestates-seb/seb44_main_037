@@ -1,5 +1,6 @@
 import axios from "axios";
 import createError from "../utils/createError";
+import handleRequestRequiringAuthorization from "../utils/handleRequestRequiringAuthorization";
 
 export default class UserAPI {
   constructor() {
@@ -34,10 +35,6 @@ export default class UserAPI {
     try {
       const res = await this.#requestLogin(body);
 
-      if (res.status !== 201) {
-        throw createError(res.status);
-      }
-
       return res;
     } catch (error) {
       return error;
@@ -45,11 +42,18 @@ export default class UserAPI {
   }
 
   async #requestLogin(body) {
-    return this.httpClient.post("users/login", body).then(res => ({
-      status: res.status,
-      result: res.data.result,
-      payload: { ...res.data.payload, accessToken: res.headers.get("token") },
-    }));
+    return this.httpClient
+      .post("users/login", body)
+      .then(res => ({
+        status: res.status,
+        result: res.data.result,
+        payload: { ...res.data.payload, accessToken: res.headers.get("token") },
+      }))
+      .catch(err => ({
+        status: err.response.status,
+        result: err.response.data.result,
+        message: err.response.data.message,
+      }));
   }
 
   async register(body) {
@@ -106,5 +110,38 @@ export default class UserAPI {
       result: res.data.result,
       payload: { ...res.data.payload, accessToken: res.headers.get("token") },
     }));
+  }
+
+  async getUserInfo(accessToken) {
+    try {
+      const res = await this.#requestUserInfo(accessToken);
+      const result = await handleRequestRequiringAuthorization(
+        res,
+        this.#requestUserInfo
+      );
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async #requestUserInfo(accessToken) {
+    return this.httpClient
+      .get("users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(res => ({
+        status: res.status,
+        result: res.data.result,
+        payload: res.data.payload,
+      }))
+      .catch(err => ({
+        status: err.response.status,
+        result: err.response.data.result,
+        message: err.response.data.message,
+      }));
   }
 }

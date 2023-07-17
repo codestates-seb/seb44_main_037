@@ -8,7 +8,7 @@ import General from "./components/routerTemplate/General";
 import ForAuth from "./components/routerTemplate/ForAuth";
 import Main from "./components/pages/Main";
 import ProductDetail from "./components/pages/ProductDetail";
-import MyPage from "./components/pages/MyPage";
+import Point from "./components/pages/Point";
 import ForMyPage from "./components/routerTemplate/ForMyPage";
 import ProductRegister from "./components/pages/ProductRegister";
 import UserRegister from "./components/pages/UserRegister";
@@ -68,7 +68,13 @@ export default function App() {
         },
         {
           path: "products/:id",
-          element: <ProductDetail />,
+          element: (
+            <ProductDetail
+              user={user}
+              accessToken={accessToken}
+              setAccessToken={setAccessToken}
+            />
+          ),
         },
       ],
     },
@@ -107,6 +113,7 @@ export default function App() {
         <ForMyPage
           isLogin={isLogin}
           setIsLogin={setIsLogin}
+          accessToken={accessToken}
           setAccessToken={setAccessToken}
           setUser={setUser}
         />
@@ -115,7 +122,7 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <MyPage />,
+          element: <Point />,
         },
       ],
     },
