@@ -12,7 +12,9 @@ async function checkUserInfo(req, res, next) {
   const refreshPayload = verifyToken("refresh", refreshToken);
 
   if (accessPayload) {
-    const user = await User.findOne({ _id: accessPayload.id });
+    const user = await User
+      .findOne({ _id: accessPayload.id })
+      .populate(["salesList", "shoppingList"]);;
 
     if (!user) {
       return res

@@ -8,6 +8,10 @@ const logout = require("./controllers/users/logout");
 const register = require("./controllers/users/register");
 const reissueAccessToken = require("./controllers/common/reissueAccessToken");
 const { multerUpload } = require("./controllers/helper/s3Functions");
+const checkUserInfo = require("./controllers/common/checkUserInfo");
+const responseUserInfo = require("./controllers/users/responseUserInfo");
+
+router.get("/", checkUserInfo, responseUserInfo);
 
 router.post("/login", getAccessToken, getUserEmail, issueTokens);
 
