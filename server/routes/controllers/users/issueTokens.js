@@ -9,7 +9,10 @@ async function issueTokens(req, res, next) {
     if (!user) {
       return res
         .status(200)
-        .send({ result: FAILED, email: req.email });
+        .send({
+          result: FAILED,
+          payload: { email: req.email }
+        });
     }
 
     const { accessToken, refreshToken } = generateToken(user, true);
@@ -30,7 +33,10 @@ async function issueTokens(req, res, next) {
   } catch (err) {
     return res
       .status(401)
-      .send({ message: "토큰을 생성하는 과정에서 문제가 생겼습니다." });
+      .send({
+        result: FAILED,
+        message: "토큰을 생성하는 과정에서 문제가 생겼습니다."
+      });
   }
 };
 
