@@ -1,7 +1,11 @@
 import { KR_TIME_DIFF } from "../constants/time";
 
-const formatLeftTime = (deadline: number, type = ""): string => {
-  const now = Date.now();
+const formatLeftTime = (
+  deadline: number,
+  type = "",
+  currentTime = Date.now()
+): string => {
+  const now = currentTime || Date.now();
 
   if (now > deadline) return "마감";
 

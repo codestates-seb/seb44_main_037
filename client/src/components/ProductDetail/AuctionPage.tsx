@@ -213,6 +213,32 @@ export default function AuctionPage({
   const leftBlanks = Array.from({ length: 4 - product.images.length });
   const hasBider = product.history.length > 0;
 
+  const fetchServerTime = () => {
+    const eventSource = new EventSource(
+      `${process.env.REACT_APP_SERVER}/products/time`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    eventSource.onmessage = async event => {
+      const res = await event.data;
+      setCurrentTime(res);
+    };
+
+    eventSource.onerror = (e: any) => {
+      eventSource.close();
+    };
+
+    return eventSource;
+  };
+
+  useEffect(() => {
+    const eventSource = fetchServerTime();
+
+    return () => eventSource.close();
+  }, []);
+
   useEffect(() => {
     setLatestBid(product.history[product.history.length - 1]);
   }, [product]);
@@ -386,7 +412,11 @@ export default function AuctionPage({
             <SmallTitle>실시간 입찰 현황</SmallTitle>
             <SmallText>
               {isOnSale
-                ? formatLeftTime(product.bidInfo.deadline, "second")
+                ? formatLeftTime(
+                    product.bidInfo.deadline,
+                    "second",
+                    currentTime
+                  )
                 : "마감"}
             </SmallText>
             {hasBider && (
