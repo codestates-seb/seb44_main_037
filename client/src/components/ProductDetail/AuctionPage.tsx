@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import formatCreatedAt from "../../utils/formatCreatedAt";
 import formatLeftTime from "../../utils/formatLeftTime";
-import PriceDetail from "../ProductDetail/PriceDetail";
-import HalfButton from "../common/HalfButton";
-import BidInput from "./BidInput";
 import useInput from "../../hook/useInput";
 import TradingAPI from "../../api/trading";
 import { FAILED, OK } from "../../constants/messages";
+
+import HalfButton from "../common/HalfButton";
+import PriceDetail from "../ProductDetail/PriceDetail";
+import BidInput from "./BidInput";
+import LeftTime from "./LeftTime";
 
 const Container = styled.div`
   display: flex;
@@ -199,7 +201,6 @@ export default function AuctionPage({
   setAccessToken,
 }: AuctionPageProps) {
   const [selectedImage, setSelectedImage] = useState<string>(product.images[0]);
-  const [currentTime, setCurrentTime] = useState();
   const [isOnSale, setIsOnSale] = useState(product.isOnSale);
   const [latestBid, setLatestBid] = useState(
     product.history[product.history.length - 1] || null
@@ -212,32 +213,6 @@ export default function AuctionPage({
   const isSeller = user?._id === product.seller._id;
   const leftBlanks = Array.from({ length: 4 - product.images.length });
   const hasBider = product.history.length > 0;
-
-  const fetchServerTime = () => {
-    const eventSource = new EventSource(
-      `${process.env.REACT_APP_SERVER}/products/time`,
-      {
-        withCredentials: true,
-      }
-    );
-
-    eventSource.onmessage = async event => {
-      const res = await event.data;
-      setCurrentTime(res);
-    };
-
-    eventSource.onerror = (e: any) => {
-      eventSource.close();
-    };
-
-    return eventSource;
-  };
-
-  useEffect(() => {
-    const eventSource = fetchServerTime();
-
-    return () => eventSource.close();
-  }, []);
 
   useEffect(() => {
     setLatestBid(product.history[product.history.length - 1]);
@@ -411,13 +386,11 @@ export default function AuctionPage({
           <RightBox>
             <SmallTitle>실시간 입찰 현황</SmallTitle>
             <SmallText>
-              {isOnSale
-                ? formatLeftTime(
-                    product.bidInfo.deadline,
-                    "second",
-                    currentTime
-                  )
-                : "마감"}
+              {isOnSale ? (
+                <LeftTime deadline={product.bidInfo.deadline} />
+              ) : (
+                "마감"
+              )}
             </SmallText>
             {hasBider && (
               <>
