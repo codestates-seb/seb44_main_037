@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useUser } from "../routerTemplate/ForMyPage";
 import formatCreatedAt from "../../utils/formatCreatedAt";
+import Payment from "../mypage/pointPage/Payment";
 
 const Background = styled.div`
   display: flex;
@@ -15,11 +15,11 @@ const Background = styled.div`
 `;
 
 const Title = styled.h2`
-  padding: 0 2rem;
-  margin-bottom: 2rem;
+  padding: 0 2rem 1.5rem 2rem;
   color: #474747;
   font-size: 1.4rem;
   font-weight: bold;
+  border-bottom: 0.1rem solid var(--line-gray);
 `;
 
 const Box = styled.div`
@@ -39,15 +39,17 @@ const LineWrapper = styled.div`
 
 const PointCard = styled(LineWrapper)`
   padding: 1.5rem 2rem;
-  border-top: 0.1rem solid var(--line-gray);
   border-bottom: 0.1rem solid var(--line-gray);
+  background-color: var(--light-green);
 `;
 
 const Price = styled.div<{
   color?: string;
+  isBold?: boolean;
 }>`
-  color: ${props => props.color || "#000"};
+  color: ${props => props.color || "var(--green)"};
   font-size: 1.2rem;
+  font-weight: ${props => props.isBold && "bold"};
 `;
 
 const SmallText = styled.div`
@@ -67,19 +69,20 @@ const HistoryCard = styled.div`
   }
 `;
 
-export default function Point() {
-  const { userInfo, setUserInfo, accessToken, setAccessToken } = useUser();
+export default function PointPage() {
+  const { userInfo } = useUser();
+
   return (
     <Background>
       <Box>
         <Title>포인트 내역</Title>
         <PointCard>
           <div>현재 보유한 포인트</div>
-          <Price>{userInfo.point.toLocaleString()}</Price>
+          <Price isBold={true}>{userInfo.point.toLocaleString()}P</Price>
         </PointCard>
         {userInfo.pointHistory.map(
           ({ title, productId, price, balance, createdAt }) => (
-            <HistoryCard>
+            <HistoryCard key={`${createdAt} + ${balance}`}>
               <LineWrapper>
                 <div>{title}</div>
                 <Price color={price > 0 ? "var(--blue)" : "var(--red)"}>{`${
@@ -94,9 +97,7 @@ export default function Point() {
           )
         )}
       </Box>
-      <Box>
-        <Title>충전하기</Title>
-      </Box>
+      <Payment />
     </Background>
   );
 }

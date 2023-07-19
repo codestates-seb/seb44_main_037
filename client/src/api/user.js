@@ -144,4 +144,38 @@ export default class UserAPI {
         message: err.response.data.message,
       }));
   }
+
+  async charge(accessToken, body) {
+    try {
+      const res = await this.#requestCharge(accessToken, body);
+      const result = await handleRequestRequiringAuthorization(
+        res,
+        this.#requestCharge,
+        body
+      );
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async #requestCharge(accessToken, body) {
+    return this.httpClient
+      .post("users/charge", body, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(res => ({
+        status: res.status,
+        result: res.data.result,
+        payload: res.data.payload,
+      }))
+      .catch(err => ({
+        status: err.response.status,
+        result: err.response.data.result,
+        message: err.response.data.message,
+      }));
+  }
 }

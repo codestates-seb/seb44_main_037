@@ -8,13 +8,15 @@ import General from "./components/routerTemplate/General";
 import ForAuth from "./components/routerTemplate/ForAuth";
 import Main from "./components/pages/Main";
 import ProductDetail from "./components/pages/ProductDetail";
-import Point from "./components/pages/Point";
+import PointPage from "./components/pages/PointPage";
 import ForMyPage from "./components/routerTemplate/ForMyPage";
 import ProductRegister from "./components/pages/ProductRegister";
 import UserRegister from "./components/pages/UserRegister";
 import Login from "./components/pages/Login";
 import UserAPI from "./api/user";
 import { OK } from "./constants/messages";
+import SuccessPage from "./components/mypage/pointPage/SuccessPage";
+import FailPage from "./components/mypage/pointPage/FailPage";
 
 axios.defaults.withCredentials = true;
 
@@ -122,7 +124,19 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <Point />,
+          element: <PointPage />,
+        },
+        {
+          path: "point",
+          element: <PointPage />,
+        },
+        {
+          path: "point/success",
+          element: <SuccessPage />,
+        },
+        {
+          path: "point/fail",
+          element: <FailPage />,
         },
       ],
     },

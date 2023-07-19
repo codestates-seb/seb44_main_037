@@ -39,13 +39,15 @@ type ForMyPageProps = {
 
 type PointHistory = {
   title: string;
-  productId: string;
   price: number;
   balance: number;
   createdAt: number;
+  productId?: string;
+  paymentId?: string;
 };
 
 type User = {
+  _id: string;
   email: string;
   nickname: string;
   image: string;
