@@ -10,6 +10,7 @@ const reissueAccessToken = require("./controllers/common/reissueAccessToken");
 const { multerUpload } = require("./controllers/helper/s3Functions");
 const checkUserInfo = require("./controllers/common/checkUserInfo");
 const responseUserInfo = require("./controllers/users/responseUserInfo");
+const chargePoint = require("./controllers/users/chargePoint");
 
 router.get("/", checkUserInfo, responseUserInfo);
 
@@ -20,5 +21,7 @@ router.get("/logout", logout);
 router.post("/register", multerUpload.single("imageData"), register, issueTokens);
 
 router.get("/silent-refresh", reissueAccessToken);
+
+router.post("/charge", checkUserInfo, chargePoint);
 
 module.exports = router;

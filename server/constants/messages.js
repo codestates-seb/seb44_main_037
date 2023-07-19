@@ -7,6 +7,7 @@ const MESSAGES = {
   TOKEN_REISSUED: "액세스 토큰이 재발급되었습니다.",
   REFRESH_TOKEN_EXPIRED: "리프레시 토큰이 만료되었습니다.",
   INSUFFICIENT_POINT: "포인트가 부족합니다.",
+  CLOSED_ORDER: "이미 처리된 주문입니다.",
   OK: "ok",
   FAILED: "failed"
 };

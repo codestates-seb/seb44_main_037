@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   pointHistory: [{
     title: String,
+    chargeId: String,
     productId: ObjectId,
     price: Number,
     balance: Number,
