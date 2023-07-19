@@ -9,7 +9,9 @@ const variables = css`
   --input-gray: #f2f3f6;
   --navy: #344b60;
   --blue: #2a73e1;
+  --light-blue: rgba(42, 115, 225, 0.1);
   --green: #3eaf7c;
+  --light-green: rgba(62, 175, 124, 0.1);
   --theme-green: #93b778;
   --red: #f04646;
   --pink: #f67951;
