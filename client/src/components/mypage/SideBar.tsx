@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -20,12 +21,14 @@ const Image = styled.img`
   background-color: var(--line-gray);
 `;
 
-const CategoryBox = styled.div`
-  & > * {
-    display: block;
-    margin: 1.5rem 0;
-    font-size: 1.1rem;
-  }
+const CategoryName = styled.div<{
+  isSelected?: boolean;
+}>`
+  display: block;
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+  font-weight: ${props => props.isSelected && "bold"};
+  color: ${props => props.isSelected && "var(--green)"};
 `;
 
 const Nickname = styled.div`
@@ -41,16 +44,32 @@ type SideBarProps = {
 };
 
 const SideBar = ({ image, nickname }: SideBarProps) => {
+  const [selectedMenu, setSelectedMenu] = useState(0);
+
+  const menu = [
+    { name: "포인트", link: "/mypage/point" },
+    { name: "메시지", link: "/mypage/chat" },
+    { name: "구매내역", link: "/mypage" },
+    { name: "판매내역", link: "/mypage" },
+  ];
+
+  const handleMenuClick = (index: number) => {
+    setSelectedMenu(index);
+  };
+
   return (
     <Wrapper>
       <Image src={image} />
       <Nickname>{nickname}</Nickname>
-      <CategoryBox>
-        <Link to="/">포인트</Link>
-        <Link to="/">메시지</Link>
-        <Link to="/">구매내역</Link>
-        <Link to="/">판매내역</Link>
-      </CategoryBox>
+      <div>
+        {menu.map(({ name, link }, index: number) => (
+          <Link to={link} onClick={() => handleMenuClick(index)}>
+            <CategoryName isSelected={selectedMenu === index}>
+              {name}
+            </CategoryName>
+          </Link>
+        ))}
+      </div>
     </Wrapper>
   );
 };
