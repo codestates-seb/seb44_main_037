@@ -17,10 +17,22 @@ import UserAPI from "./api/user";
 import { OK } from "./constants/messages";
 import SuccessPage from "./components/mypage/pointPage/SuccessPage";
 import FailPage from "./components/mypage/pointPage/FailPage";
+import ChatPage from "./components/mypage/chatPage/ChatPage";
 
 axios.defaults.withCredentials = true;
 
 const userAPI = new UserAPI();
+
+export interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+  message: (data: any) => void;
+}
+
+export interface ClientToServerEvents {
+  message: (myMessage: any, callback: (e: any) => void) => void;
+}
 
 export default function App() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -137,6 +149,10 @@ export default function App() {
         {
           path: "point/fail",
           element: <FailPage />,
+        },
+        {
+          path: "chat",
+          element: <ChatPage />,
         },
       ],
     },
