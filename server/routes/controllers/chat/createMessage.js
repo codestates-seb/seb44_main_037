@@ -2,7 +2,7 @@ const { INVALID_REQUEST, OK } = require("../../../constants/messages");
 const ChatRoom = require("../../../models/ChatRoom");
 
 async function createMessage(req, res, next) {
-  const { text, roomId } = req.body;
+  const { text, roomId, receiver } = req.body;
   const user = req.user;
   const now = Date.now();
 
@@ -23,9 +23,13 @@ async function createMessage(req, res, next) {
     const update = {
       $push: {
         messages: {
-          user: {
-            userId: user._id,
+          sender: {
+            _id: user._id,
             nickname: user.nickname
+          },
+          receiver: {
+            _id: receiver._id,
+            nickname: receiver.nickname
           },
           text,
           createdAt: now
@@ -36,7 +40,7 @@ async function createMessage(req, res, next) {
     const updatedChatRoom = await ChatRoom
       .findOneAndUpdate(filter, update, { new: true })
       .populate(["product"]);
-    const newMessage = updatedChatRoom.messages[updatedChatRoom.messages.lengh - 1];
+    const newMessage = updatedChatRoom.messages[updatedChatRoom.messages.length - 1];
 
     return res
       .status(200)

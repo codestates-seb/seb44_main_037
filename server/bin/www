@@ -5,9 +5,12 @@ const server = require("http").createServer(app);
 const {
   PORT,
 } = require("../config/envConfig");
+const connectSocketIo = require("../config/socket");
 
 const port = normalizePort(PORT || "3000");
 app.set("port", port);
+
+connectSocketIo(server, app);
 
 server.listen(port);
 server.on("error", onError);
