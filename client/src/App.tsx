@@ -74,7 +74,7 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <Main isLogin={isLogin} setIsLogin={setIsLogin} />,
+          element: <Main />,
         },
         {
           path: "products/new",

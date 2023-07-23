@@ -3,9 +3,7 @@ import createError from "../utils/createError";
 import {
   DEMAND_LOGIN,
   INVALID_BODY,
-  INVALID_USER,
   OK,
-  REFRESH_TOKEN_EXPIRED,
   TOKEN_REISSUED,
 } from "../constants/messages";
 
@@ -42,11 +40,11 @@ export default class ProductAPI {
     try {
       const res = await this.#searchAllProducts(params);
 
-      if (res.status !== 205) {
+      if (res.status !== 200) {
         throw createError(res.status);
       }
 
-      return res.data;
+      return res;
     } catch (error) {
       return error;
     }
@@ -59,7 +57,8 @@ export default class ProductAPI {
       })
       .then(res => ({
         status: res.status,
-        data: res.data,
+        result: res.data.result,
+        payload: res.data.payload,
       }));
   }
 

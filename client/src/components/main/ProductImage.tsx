@@ -15,11 +15,9 @@ const Text = styled.div<{ isDark: boolean }>`
 `;
 
 export const Image = styled.img<{ isDark: boolean }>`
-  width: 14rem;
+  width: 100%;
   height: 12rem;
-  padding: 0.2rem;
-  object-fit: contain;
-  border: 0.05rem solid var(--line-gray);
+  object-fit: cover;
   filter: ${props => props.isDark && "brightness(50%)"};
 `;
 

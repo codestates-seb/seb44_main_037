@@ -18,6 +18,7 @@ type Product = {
   category: string;
   deadline: number;
   createdAt: number;
+  history: Array<History>;
 };
 
 type ProductCardProps = {
@@ -29,7 +30,6 @@ type BidInfo = {
   startPrice: number;
   bidUnit: number;
   deadline: number;
-  history: Array<History>;
 };
 
 type History = {
@@ -39,11 +39,11 @@ type History = {
 };
 
 export default function AuctionProductCard({ data }: ProductCardProps) {
-  const { _id: productId, images, title, bidInfo, category } = data;
+  const { _id: productId, images, title, bidInfo, category, history } = data;
 
-  const highestBid = bidInfo?.history[bidInfo.history.length - 1];
+  const highestBid = history[history.length - 1];
   const isFinished = Date.now() > bidInfo?.deadline;
-  const hasSuccessfulBidder = bidInfo?.history.length > 0;
+  const hasSuccessfulBidder = history.length > 0;
 
   return (
     <S.Wrapper>

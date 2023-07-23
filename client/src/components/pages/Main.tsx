@@ -1,22 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import UserAPI from "../../api/user";
-import FakeProductAPI from "../../api/fake/fakeProduct";
 import ProductAPI from "../../api/product";
-import { FAILED, OK } from "../../constants/messages";
+import { OK } from "../../constants/messages";
 import {
   ALL_KO,
   categoryList,
   typeList,
   statusList,
+  AUCTION,
 } from "../../constants/products";
-import AuctionProductCard from "../main/AuctionProductCard";
-import GeneralProductCard from "../main/GeneralProductCard";
 import SearchBar from "../main/SearchBar";
 import DropDown from "../common/DropDown";
-
-const userAPI = new UserAPI();
+import AuctionProductCard from "../main/AuctionProductCard";
+import GeneralProductCard from "../main/GeneralProductCard";
 
 const Container = styled.div`
   display: flex;
@@ -56,6 +53,11 @@ const MenuBar = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-bottom: 1.5rem;
+  gap: 1rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const SearchBarWrapper = styled.div`
@@ -72,61 +74,40 @@ const CategoryBar = styled.div`
   gap: 1rem;
 `;
 
-type MainProps = {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-};
+const Wrapper = styled.ul`
+  display: grid;
+  gap: 2rem;
 
-// const productAPI = new ProductAPI();
-const productAPI = new FakeProductAPI();
+  @media screen and (min-width: 450px) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
 
-export default function Main({ isLogin, setIsLogin }: MainProps) {
+  @media screen and (min-width: 560px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media screen and (min-width: 1280px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @media screen and (min-width: 1536px) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+`;
+
+const productAPI = new ProductAPI();
+
+export default function Main() {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(ALL_KO);
   const [selectedType, setSelectedType] = useState(ALL_KO);
   const [selectedStatus, setSelectedStatus] = useState(ALL_KO);
 
   const [products, setProducts] = useState<any>([]);
-  const [auction, setAuction] = useState<any>({});
-  const [general, setGeneral] = useState<any>({});
-
-  const requestUserData = async (code: string) => {
-    const body = { authorizationCode: code };
-    const response: any = await userAPI.login(body);
-
-    if (response.result === FAILED) {
-      navigate("/user/register", {
-        state: {
-          email: response.email,
-        },
-      });
-
-      return;
-    }
-
-    if (response.result === OK) {
-      setIsLogin(true);
-      sessionStorage.setItem("user", JSON.stringify(response.body.user));
-      return;
-    }
-
-    navigate("/error");
-  };
-
-  useEffect(() => {
-    if (sessionStorage.getItem("user")) {
-      setIsLogin(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const authorizationCode = url.searchParams.get("code");
-
-    if (authorizationCode) {
-      requestUserData(authorizationCode);
-    }
-  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -136,26 +117,17 @@ export default function Main({ isLogin, setIsLogin }: MainProps) {
         status: selectedStatus,
       };
 
-      const response = await productAPI.getAllProducts(params);
+      const response: any = await productAPI.getAllProducts(params);
 
       if (response.result !== OK) {
         navigate("/error");
         return;
       }
 
-      setProducts(response.body.data);
+      setProducts(response.payload.products);
     }
 
-    // fetchData();
-
-    const getSingleProduct = async () => {
-      const response1 = await productAPI.getSingleAuctionProduct();
-      const response2 = await productAPI.getSingleGeneralProduct();
-      setAuction(response1.data);
-      setGeneral(response2.data);
-    };
-    console.log(selectedCategory, selectedType, selectedStatus);
-    getSingleProduct();
+    fetchData();
   }, [selectedCategory, selectedType, selectedStatus]);
 
   return (
@@ -187,10 +159,15 @@ export default function Main({ isLogin, setIsLogin }: MainProps) {
             />
           </CategoryBar>
         </MenuBar>
-        <div>
-          <AuctionProductCard data={auction} />
-          <GeneralProductCard data={general} />
-        </div>
+        <Wrapper>
+          {products.map((product: any) =>
+            product.saleType === AUCTION ? (
+              <AuctionProductCard data={product} />
+            ) : (
+              <GeneralProductCard data={product} />
+            )
+          )}
+        </Wrapper>
       </Container>
     </>
   );
