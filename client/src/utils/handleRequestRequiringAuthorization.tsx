@@ -1,5 +1,6 @@
 import {
   DEMAND_LOGIN,
+  INSUFFICIENT_POINT,
   INVALID_BODY,
   OK,
   TOKEN_REISSUED,
@@ -34,6 +35,14 @@ const handleRequestRequiringAuthorization = async (
       status: res.status,
       result: res.result,
       message: DEMAND_LOGIN,
+    };
+  }
+
+  if (res.status === 400 && res.message === INSUFFICIENT_POINT) {
+    return {
+      status: res.status,
+      result: res.result,
+      message: INSUFFICIENT_POINT,
     };
   }
 

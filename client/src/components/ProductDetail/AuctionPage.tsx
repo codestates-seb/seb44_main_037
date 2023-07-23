@@ -182,6 +182,7 @@ const HistoryTitle = styled(History)`
 const tradingAPI = new TradingAPI();
 
 type History = {
+  _id: string;
   bider: any;
   bidPrice: number;
   createdAt: number;
@@ -260,6 +261,11 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
   };
 
   const handleBidClick = async () => {
+    if (latestBid.bider._id === user._id) {
+      alert("이미 최고 입찰자입니다.");
+      return;
+    }
+
     const body = { productId: product._id, price: form.bid };
     const response: any = await tradingAPI.bid(body, accessToken);
 
@@ -268,8 +274,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
       const bidHistory = updatedProduct.history;
       const data = bidHistory[bidHistory.length - 1];
 
-      setProduct((prev: any) => ({ ...prev, ...updatedProduct }));
-
+      setProduct(updatedProduct);
       alert("응찰에 성공했습니다!");
 
       socket?.emit("bid", data, (response: any) => {
@@ -278,8 +283,10 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
     }
 
     if (response.result === FAILED) {
-      alert("응찰에 실패했습니다.");
+      alert(response.message);
     }
+
+    reset();
   };
 
   const handleRepostClick = async () => {
@@ -445,8 +452,8 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   </HistoryTitle>
                   {[...product.history]
                     .reverse()
-                    .map(({ bider, bidPrice, createdAt }: History) => (
-                      <History>
+                    .map(({ bider, bidPrice, createdAt, _id }: History) => (
+                      <History key={_id}>
                         <div>{formatCreatedAt(createdAt)}</div>
                         <div>{`${bidPrice.toLocaleString()}원`}</div>
                         <div>{bider.nickname}</div>
