@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { FAILED, OK } from "../../constants/messages";
 import UserAPI from "../../api/user";
@@ -22,8 +22,39 @@ const BodyWrapper = styled.div`
 type GeneralProps = {
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  accessToken: string;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  user: any;
   setUser: React.Dispatch<React.SetStateAction<any>>;
+};
+
+type PointHistory = {
+  title: string;
+  price: number;
+  balance: number;
+  createdAt: number;
+  productId?: string;
+  paymentId?: string;
+};
+
+type User = {
+  _id: string;
+  email: string;
+  nickname: string;
+  image: string;
+  salesList: Array<string>;
+  shoppingList: Array<string>;
+  point: number;
+  pointHistory: Array<PointHistory>;
+};
+
+type ContextType = {
+  isLogin: boolean;
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  accessToken: string;
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
 };
 
 const userAPI = new UserAPI();
@@ -31,7 +62,9 @@ const userAPI = new UserAPI();
 export default function General({
   isLogin,
   setIsLogin,
+  accessToken,
   setAccessToken,
+  user,
   setUser,
 }: GeneralProps) {
   const navigate = useNavigate();
@@ -80,8 +113,23 @@ export default function General({
         />
       </HeaderWrapper>
       <BodyWrapper>
-        <Outlet />
+        <Outlet
+          context={
+            {
+              isLogin,
+              setIsLogin,
+              accessToken,
+              setAccessToken,
+              user,
+              setUser,
+            } satisfies ContextType
+          }
+        />
       </BodyWrapper>
     </>
   );
+}
+
+export function useGlobalContext() {
+  return useOutletContext<ContextType>();
 }

@@ -28,10 +28,14 @@ export interface ServerToClientEvents {
   basicEmit: (a: number, b: string, c: Buffer) => void;
   withAck: (d: string, callback: (e: number) => void) => void;
   message: (data: any) => void;
+  bid: (data: any) => void;
+  auctionClose: (data: any) => void;
 }
 
 export interface ClientToServerEvents {
   message: (myMessage: any, callback: (e: any) => void) => void;
+  bid: (myBid: any, callback: (e: any) => void) => void;
+  auctionClose: (data: any, callback: (e: any) => void) => void;
 }
 
 export default function App() {
@@ -60,7 +64,9 @@ export default function App() {
         <General
           isLogin={isLogin}
           setIsLogin={setIsLogin}
+          accessToken={accessToken}
           setAccessToken={setAccessToken}
+          user={user}
           setUser={setUser}
         />
       ),
@@ -82,13 +88,7 @@ export default function App() {
         },
         {
           path: "products/:id",
-          element: (
-            <ProductDetail
-              user={user}
-              accessToken={accessToken}
-              setAccessToken={setAccessToken}
-            />
-          ),
+          element: <ProductDetail />,
         },
       ],
     },

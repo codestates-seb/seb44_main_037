@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { io, Socket } from "socket.io-client";
+import type { ServerToClientEvents, ClientToServerEvents } from "../../App";
 import formatCreatedAt from "../../utils/formatCreatedAt";
-import formatLeftTime from "../../utils/formatLeftTime";
 import useInput from "../../hook/useInput";
+import { useGlobalContext } from "../routerTemplate/General";
 import TradingAPI from "../../api/trading";
 import { FAILED, OK } from "../../constants/messages";
 
@@ -186,37 +188,52 @@ type History = {
 };
 
 type AuctionPageProps = {
-  user: any;
   product: any;
   setProduct: React.Dispatch<React.SetStateAction<any>>;
-  accessToken: string;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function AuctionPage({
-  user,
-  product,
-  setProduct,
-  accessToken,
-  setAccessToken,
-}: AuctionPageProps) {
+export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
   const [selectedImage, setSelectedImage] = useState<string>(product.images[0]);
-  const [isOnSale, setIsOnSale] = useState(product.isOnSale);
-  const [latestBid, setLatestBid] = useState(
-    product.history[product.history.length - 1] || null
-  );
+  const [socket, setSocket] = useState<
+    Socket<ServerToClientEvents, ClientToServerEvents> | undefined
+  >();
 
+  const { user, accessToken, setAccessToken } = useGlobalContext();
   const [form, onChange, reset, setForm] = useInput({
     bid: "",
   });
 
+  const latestBid = product.history[product.history.length - 1] || null;
   const isSeller = user?._id === product.seller._id;
   const leftBlanks = Array.from({ length: 4 - product.images.length });
   const hasBider = product.history.length > 0;
 
   useEffect(() => {
-    setLatestBid(product.history[product.history.length - 1]);
-  }, [product]);
+    const URL: string = process.env.REACT_APP_SERVER || "";
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      `${URL}/auction`,
+      {
+        withCredentials: true,
+        extraHeaders: {
+          "product-id": product._id,
+        },
+      }
+    );
+
+    setSocket(socket);
+  }, []);
+
+  useEffect((): any => {
+    socket?.on("bid", (data: any) => {
+      setProduct({ ...product, history: [...product.history, data] });
+    });
+
+    socket?.on("auctionClose", (data: any) => {
+      setProduct(data);
+    });
+
+    return () => socket?.disconnect();
+  }, [socket]);
 
   const handleChatClick = () => {
     console.log("chat 클릭!");
@@ -227,8 +244,14 @@ export default function AuctionPage({
     const response: any = await tradingAPI.bidInstantly(body, accessToken);
 
     if (response.result === OK) {
-      setProduct(response.payload.product);
-      alert("즉시 낙찰되었습니다!");
+      const updatedProduct = response.payload.product;
+
+      setProduct((prev: any) => ({ ...prev, ...updatedProduct }));
+      alert("경매를 조기종료합니다.");
+
+      socket?.emit("auctionClose", updatedProduct, (response: any) => {
+        console.log(response);
+      });
     }
 
     if (response.result === FAILED) {
@@ -241,9 +264,17 @@ export default function AuctionPage({
     const response: any = await tradingAPI.bid(body, accessToken);
 
     if (response.result === OK) {
-      setProduct(response.payload.product);
-      setLatestBid(product.history[product.history.length - 1]);
+      const updatedProduct = response.payload.product;
+      const bidHistory = updatedProduct.history;
+      const data = bidHistory[bidHistory.length - 1];
+
+      setProduct((prev: any) => ({ ...prev, ...updatedProduct }));
+
       alert("응찰에 성공했습니다!");
+
+      socket?.emit("bid", data, (response: any) => {
+        console.log(response);
+      });
     }
 
     if (response.result === FAILED) {
@@ -260,9 +291,14 @@ export default function AuctionPage({
     const response: any = await tradingAPI.closeBid(body, accessToken);
 
     if (response.result === OK) {
-      setProduct(response.payload.product);
-      setLatestBid(product.history[product.history.length - 1]);
+      const updatedProduct = response.payload.product;
+
+      setProduct(updatedProduct);
       alert("경매를 조기종료합니다.");
+
+      socket?.emit("auctionClose", updatedProduct, (response: any) => {
+        console.log(response);
+      });
     }
 
     if (response.result === FAILED) {
@@ -321,7 +357,7 @@ export default function AuctionPage({
               />
             </AuctionPriceWrapper>
 
-            {isOnSale && !isSeller && (
+            {product.isOnSale && !isSeller && (
               <BidInput
                 form={form}
                 name={"bid"}
@@ -330,7 +366,7 @@ export default function AuctionPage({
               />
             )}
 
-            {isOnSale && !isSeller && (
+            {product.isOnSale && !isSeller && (
               <ButtonBar>
                 <HalfButton
                   name="판매자와 연락하기"
@@ -346,7 +382,7 @@ export default function AuctionPage({
                 />
               </ButtonBar>
             )}
-            {isOnSale && isSeller && (
+            {product.isOnSale && isSeller && (
               <ButtonBar>
                 <HalfButton
                   name="경매 조기종료"
@@ -356,7 +392,7 @@ export default function AuctionPage({
                 />
               </ButtonBar>
             )}
-            {!isOnSale && hasBider && (
+            {!product.isOnSale && hasBider && (
               <ButtonBar>
                 <HalfButton
                   name={isSeller ? "구매자와 연락하기" : "판매자와 연락하기"}
@@ -366,7 +402,7 @@ export default function AuctionPage({
                 />
               </ButtonBar>
             )}
-            {!isOnSale && !hasBider && (
+            {!product.isOnSale && !hasBider && (
               <ButtonBar>
                 <HalfButton
                   name={isSeller ? "일반 판매로 전환하기" : "판매자와 연락하기"}
@@ -386,7 +422,7 @@ export default function AuctionPage({
           <RightBox>
             <SmallTitle>실시간 입찰 현황</SmallTitle>
             <SmallText>
-              {isOnSale ? (
+              {product.isOnSale ? (
                 <LeftTime deadline={product.bidInfo.deadline} />
               ) : (
                 "마감"
@@ -407,15 +443,15 @@ export default function AuctionPage({
                     <div>입찰가</div>
                     <div>입찰자명</div>
                   </HistoryTitle>
-                  {product.history.map(
-                    ({ bider, bidPrice, createdAt }: History) => (
+                  {[...product.history]
+                    .reverse()
+                    .map(({ bider, bidPrice, createdAt }: History) => (
                       <History>
                         <div>{formatCreatedAt(createdAt)}</div>
                         <div>{`${bidPrice.toLocaleString()}원`}</div>
                         <div>{bider.nickname}</div>
                       </History>
-                    )
-                  )}
+                    ))}
                 </HistoryBox>
               </>
             )}

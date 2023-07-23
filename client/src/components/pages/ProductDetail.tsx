@@ -1,27 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ProductAPI from "../../api/product";
-import FakeProductAPI from "../../api/fake/fakeProduct";
 import AuctionPage from "../ProductDetail/AuctionPage";
 import GeneralPage from "../ProductDetail/GeneralPage";
 import { AUCTION, GENERAL } from "../../constants/products";
+import { useGlobalContext } from "../routerTemplate/General";
 
 const productAPI = new ProductAPI();
-// const productAPI = new FakeProductAPI();
 
-type ProductDetailProps = {
-  user: any;
-  accessToken: string;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-};
-
-export default function ProductDetail({
-  user,
-  accessToken,
-  setAccessToken,
-}: ProductDetailProps) {
+export default function ProductDetail() {
   const { id: productId } = useParams();
   const [product, setProduct] = useState<any>(null);
+
+  const { user, accessToken, setAccessToken } = useGlobalContext();
 
   const isAuction = product && product?.saleType === AUCTION;
   const isGeneral = product && product?.saleType === GENERAL;
@@ -38,15 +29,7 @@ export default function ProductDetail({
 
   return (
     <>
-      {isAuction && (
-        <AuctionPage
-          product={product}
-          setProduct={setProduct}
-          user={user}
-          accessToken={accessToken}
-          setAccessToken={setAccessToken}
-        />
-      )}
+      {isAuction && <AuctionPage product={product} setProduct={setProduct} />}
       {isGeneral && (
         <GeneralPage
           product={product}
