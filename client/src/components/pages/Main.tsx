@@ -139,7 +139,7 @@ export default function Main() {
       <Container>
         <MenuBar>
           <SearchBarWrapper>
-            <SearchBar />
+            <SearchBar setProducts={setProducts} />
           </SearchBarWrapper>
           <CategoryBar>
             <DropDown

@@ -5,8 +5,10 @@ import searchIcon from "../../assets/images/search-icon.svg";
 
 import useInput from "../../hook/useInput";
 import GrayInput from "../common/GrayInput";
+import ProductAPI from "../../api/product";
+import { OK } from "../../constants/messages";
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
@@ -32,33 +34,38 @@ const FormIcon = styled.img.attrs(props => ({
   cursor: pointer;
 `;
 
-export default function SearchBar() {
-  const navigate = useNavigate();
-  const { keyword } = useParams();
+type SearchBarProps = {
+  setProducts: any;
+};
+
+const productAPI = new ProductAPI();
+
+export default function SearchBar({ setProducts }: SearchBarProps) {
   const [form, onChange, reset] = useInput({
     searchValue: "",
   });
 
-  const handleSubmit = (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLImageElement>
-  ) => {
-    e.preventDefault();
-    navigate(`/videos/${form.searchValue}`);
+  const handleClick = async () => {
+    const response: any = await productAPI.getProductsByKeyword(
+      form.searchValue
+    );
+
+    if (response.result === OK) {
+      setProducts(response.payload.products);
+      return;
+    }
+
+    alert("검색에 실패했습니다.");
   };
 
-  useEffect(() => {
-    const text = keyword || "";
-    reset({ ...form, searchValue: text });
-  }, [keyword]);
-
   return (
-    <Wrapper onSubmit={handleSubmit}>
+    <Wrapper>
       <InputWrapper>
-        <FormIcon onClick={handleSubmit} src={searchIcon} alt="검색" />
+        <FormIcon onClick={handleClick} src={searchIcon} alt="검색" />
         <GrayInput
           form={form}
           onChange={onChange}
-          name="search"
+          name="searchValue"
           placeholder="찾는 물건이 있으신가요?"
         />
       </InputWrapper>

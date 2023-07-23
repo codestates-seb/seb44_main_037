@@ -62,6 +62,28 @@ export default class ProductAPI {
       }));
   }
 
+  async getProductsByKeyword(keyword) {
+    try {
+      const res = await this.#searchProductByKeyword(keyword);
+
+      if (res.status !== 200) {
+        throw createError(res.status);
+      }
+
+      return res;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async #searchProductByKeyword(keyword) {
+    return this.httpClient.get(`products/search/${keyword}`).then(res => ({
+      status: res.status,
+      result: res.data.result,
+      payload: res.data.payload,
+    }));
+  }
+
   async registerProduct(body, userId, accessToken) {
     try {
       const formData = new FormData();
