@@ -6,6 +6,18 @@ const InputContainer = styled.div`
   display: flex;
   gap: 0.3rem;
   margin-top: 3rem;
+
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: row;
+  }
+
+  @media screen and (max-width: 560px) {
+    flex-direction: column;
+  }
 `;
 
 const InputOuter = styled.div`
@@ -33,14 +45,31 @@ const InputElement = styled.input`
 `;
 
 const UnitInfo = styled.div`
+  width: 100%;
   position: absolute;
   left: 88%;
   color: var(--dark-gray);
   font-size: 1rem;
+
+  @media screen and (max-width: 1200px) {
+    left: 86%;
+  }
+
+  @media screen and (max-width: 1024px) {
+    left: 90%;
+  }
+
+  @media screen and (max-width: 650px) {
+    left: 87%;
+  }
+
+  @media screen and (max-width: 560px) {
+    left: 90%;
+  }
 `;
 
 const Button = styled.button`
-  width: 14rem;
+  min-width: 14rem;
   height: 3.3rem;
   margin: 0 0.2rem;
   padding: 10px;

@@ -46,6 +46,7 @@ export {
   FANZINE_KO,
   STUFF_KO,
   DOLL_KO,
+  NOT_ONSALE_KO,
   typeList,
   statusList,
   categoryRegisterList,

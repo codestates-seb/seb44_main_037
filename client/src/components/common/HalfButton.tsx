@@ -12,7 +12,7 @@ const Button = styled.button<{
   font-size: 1rem;
   color: white;
   background-color: ${props =>
-    props.isUnable ? "var(--gray)" : props.backgroundColor};
+    props.isUnable ? "var(--dropdown-gray)" : props.backgroundColor};
   border-radius: 0.2rem;
   cursor: ${props => (props.isUnable ? "default" : "pointer")};
 

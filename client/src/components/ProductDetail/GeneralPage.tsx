@@ -4,6 +4,7 @@ import formatCreatedAt from "../../utils/formatCreatedAt";
 import HalfButton from "../common/HalfButton";
 import TradingAPI from "../../api/trading";
 import { DEMAND_LOGIN, FAILED, OK } from "../../constants/messages";
+import { NOT_ONSALE_KO } from "../../constants/products";
 
 const Container = styled.div`
   display: flex;
@@ -20,12 +21,10 @@ const UpperBox = styled.div`
   width: 100%;
   margin-bottom: 1.5rem;
   gap: 2.5rem;
-`;
 
-const LowerBox = styled.div`
-  display: flex;
-  width: 100%;
-  margin-bottom: 1.5rem;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const LeftBox = styled.div`
@@ -39,12 +38,28 @@ const RightBox = styled.div`
   flex-basis: 50%;
 `;
 
-const FocusedImage = styled.img`
+const Wrapper = styled.div`
+  position: relative;
+`;
+
+const ImageInfo = styled.div<{ isDark: boolean }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${props => props.isDark && "#ffffff"};
+`;
+
+const MainImage = styled.img<{ isDark?: boolean }>`
+  width: 50%;
   min-width: 100%;
   max-height: 25rem;
   margin-bottom: 1rem;
   object-fit: contain;
   background-color: var(--line-gray);
+  filter: ${props => props.isDark && "brightness(50%)"};
 `;
 
 const ImageWrapper = styled.div`
@@ -153,7 +168,13 @@ export default function GeneralPage({
       <Container>
         <UpperBox>
           <LeftBox>
-            <FocusedImage src={selectedImage} />
+            {product.isOnSale && <MainImage src={selectedImage} />}
+            {!product.isOnSale && (
+              <Wrapper>
+                <MainImage src={selectedImage} isDark={true} />
+                <ImageInfo isDark={true}>{NOT_ONSALE_KO}</ImageInfo>
+              </Wrapper>
+            )}
             <Images>
               {product.images.map((url: string) => (
                 <ImageWrapper>
@@ -177,7 +198,7 @@ export default function GeneralPage({
             <BigTitle>{product.title}</BigTitle>
             <Text>{formatCreatedAt(product.createdAt)}</Text>
             <Description>{product.description}</Description>
-            {!isSeller && (
+            {!isSeller && product.isOnSale && (
               <ButtonBar>
                 <HalfButton
                   name="판매자와 연락하기"
@@ -196,10 +217,6 @@ export default function GeneralPage({
             )}
           </RightBox>
         </UpperBox>
-        <LowerBox>
-          <LeftBox></LeftBox>
-          <RightBox></RightBox>
-        </LowerBox>
       </Container>
     </>
   );
