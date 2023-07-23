@@ -11,6 +11,7 @@ const bid = require("./controllers/products/bid");
 const closeBid = require("./controllers/products/closeBid");
 const buy = require("./controllers/products/buy");
 const getServerTime = require("./controllers/products/getServerTime");
+const searchProducts = require("./controllers/products/searchProducts");
 
 router.get("/", getAllProducts);
 
@@ -25,6 +26,8 @@ router.post("/bid/close", checkUserInfo, closeBid);
 router.post("/bid/instant", checkUserInfo, bidInstantly);
 
 router.get("/time", getServerTime);
+
+router.get("/search/:keyword", searchProducts);
 
 router.get("/:id", getProduct);
 
