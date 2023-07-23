@@ -6,7 +6,17 @@ import formatCreatedAt from "../../utils/formatCreatedAt";
 import useInput from "../../hook/useInput";
 import { useGlobalContext } from "../routerTemplate/General";
 import TradingAPI from "../../api/trading";
-import { FAILED, OK } from "../../constants/messages";
+import {
+  DOUBLE_BIDDING,
+  FAILED,
+  FAILED_AUCTION_CLOSE,
+  FAILED_INSTANT_BID,
+  OK,
+  SUCCESSFUL_AUCTION_CLOSE,
+  SUCCESSFUL_BID,
+} from "../../constants/messages";
+import { ERROR, SUCCESS } from "../../constants/toast";
+import { showToast } from "../common/Toast";
 
 import HalfButton from "../common/HalfButton";
 import PriceDetail from "../ProductDetail/PriceDetail";
@@ -274,7 +284,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
       const updatedProduct = response.payload.product;
 
       setProduct((prev: any) => ({ ...prev, ...updatedProduct }));
-      alert("경매를 조기종료합니다.");
+      showToast({ type: SUCCESS, message: SUCCESSFUL_AUCTION_CLOSE });
 
       socket?.emit("auctionClose", updatedProduct, (response: any) => {
         console.log(response);
@@ -282,13 +292,13 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
     }
 
     if (response.result === FAILED) {
-      alert("낙찰에 실패했습니다.");
+      showToast({ type: ERROR, message: FAILED_INSTANT_BID });
     }
   };
 
   const handleBidClick = async () => {
     if (latestBid.bider._id === user._id) {
-      alert("이미 최고 입찰자입니다.");
+      showToast({ type: ERROR, message: DOUBLE_BIDDING });
       return;
     }
 
@@ -301,7 +311,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
       const data = bidHistory[bidHistory.length - 1];
 
       setProduct(updatedProduct);
-      alert("응찰에 성공했습니다!");
+      showToast({ type: SUCCESS, message: SUCCESSFUL_BID });
 
       socket?.emit("bid", data, (response: any) => {
         console.log(response);
@@ -309,7 +319,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
     }
 
     if (response.result === FAILED) {
-      alert(response.message);
+      showToast({ type: ERROR, message: response.message });
     }
 
     reset();
@@ -327,7 +337,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
       const updatedProduct = response.payload.product;
 
       setProduct(updatedProduct);
-      alert("경매를 조기종료합니다.");
+      showToast({ type: SUCCESS, message: SUCCESSFUL_AUCTION_CLOSE });
 
       socket?.emit("auctionClose", updatedProduct, (response: any) => {
         console.log(response);
@@ -335,7 +345,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
     }
 
     if (response.result === FAILED) {
-      alert("종료에 실패했습니다.");
+      showToast({ type: ERROR, message: FAILED_AUCTION_CLOSE });
     }
   };
 

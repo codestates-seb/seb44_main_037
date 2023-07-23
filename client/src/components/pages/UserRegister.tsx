@@ -6,8 +6,15 @@ import useInput from "../../hook/useInput";
 import UserAPI from "../../api/user";
 import displayAttachedImage from "../../utils/displayAttachedImage";
 import validateRegister from "../../utils/validateRegister";
-import { EXCESSIVE_IMAGE_SIZE, OK } from "../../constants/messages";
+import {
+  FAILED_USER_REGISTER,
+  EXCESSIVE_IMAGE_SIZE,
+  INVALID_REQUEST,
+  OK,
+} from "../../constants/messages";
 import exampleImage from "../../assets/images/example_profile.png";
+import { showToast } from "../common/Toast";
+import { ERROR } from "../../constants/toast";
 
 import RegisterInput from "../common/RegisterInput";
 import ProfileImage from "../userRegister/ProfileImage";
@@ -98,8 +105,7 @@ export default function UserRegister({
     const fileSize = files[0].size;
 
     if (fileSize > maxSize) {
-      alert(EXCESSIVE_IMAGE_SIZE);
-
+      showToast({ type: ERROR, message: EXCESSIVE_IMAGE_SIZE });
       return;
     }
 
@@ -128,11 +134,11 @@ export default function UserRegister({
         return;
       }
 
-      alert("회원가입에 실패했습니다.");
+      showToast({ type: ERROR, message: FAILED_USER_REGISTER });
       return;
     }
 
-    alert("잘못된 요청...");
+    showToast({ type: ERROR, message: INVALID_REQUEST });
   };
 
   const handleCancelClick = () => {

@@ -1,10 +1,18 @@
 import { useState } from "react";
 import styled from "styled-components";
 import formatCreatedAt from "../../utils/formatCreatedAt";
-import HalfButton from "../common/HalfButton";
 import TradingAPI from "../../api/trading";
-import { DEMAND_LOGIN, FAILED, OK } from "../../constants/messages";
+import {
+  DEMAND_LOGIN,
+  FAILED,
+  FAILED_FULFILLMENT,
+  OK,
+  SUCCESSFUL_BUY,
+} from "../../constants/messages";
 import { NOT_ONSALE_KO } from "../../constants/products";
+import { showToast } from "../common/Toast";
+import { ERROR, SUCCESS } from "../../constants/toast";
+import HalfButton from "../common/HalfButton";
 
 const Container = styled.div`
   display: flex;
@@ -150,16 +158,16 @@ export default function GeneralPage({
 
     if (response.result === OK) {
       setProduct(response.payload.product);
-      alert("구매 성공!");
+      showToast({ type: SUCCESS, message: SUCCESSFUL_BUY });
     }
 
     if (response.message === DEMAND_LOGIN) {
-      alert("로그인이 필요합니다.");
+      showToast({ type: ERROR, message: DEMAND_LOGIN });
       return;
     }
 
     if (response.result === FAILED) {
-      alert("구매 실패.");
+      showToast({ type: ERROR, message: FAILED_FULFILLMENT });
     }
   };
 

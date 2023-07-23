@@ -12,11 +12,18 @@ import {
   TITLE_GUIDE,
   PRICE_GUIDE,
 } from "../../constants/info";
-import { DEMAND_LOGIN, OK } from "../../constants/messages";
+import {
+  DEMAND_LOGIN,
+  FAILED_POST_PRODUCT,
+  INVALID_REQUEST,
+  OK,
+} from "../../constants/messages";
 import displayAttachedImages from "../../utils/displayAttachedImages";
 import checkFileSize from "../../utils/checkFileSize";
 import validateProductRegister from "../../utils/validateProductRegister";
 import useInput from "../../hook/useInput";
+import { showToast } from "../common/Toast";
+import { ERROR } from "../../constants/toast";
 
 import DropDown from "../common/DropDown";
 import InfoText from "../common/InfoText";
@@ -123,8 +130,7 @@ export default function ProductRegister({
     const sizeWarning = checkFileSize(files, maxSize);
 
     if (sizeWarning !== "") {
-      alert(sizeWarning);
-
+      showToast({ type: ERROR, message: sizeWarning });
       return;
     }
 
@@ -184,15 +190,15 @@ export default function ProductRegister({
       }
 
       if (response.message === DEMAND_LOGIN) {
-        alert("로그인이 필요합니다.");
+        showToast({ type: ERROR, message: DEMAND_LOGIN });
         return;
       }
 
-      alert("상품 등록에 실패했습니다.");
+      showToast({ type: ERROR, message: FAILED_POST_PRODUCT });
       return;
     }
 
-    alert("잘못된 요청...");
+    showToast({ type: ERROR, message: INVALID_REQUEST });
   };
 
   const handleCancelClick = () => {

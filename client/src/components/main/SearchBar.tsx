@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import searchIcon from "../../assets/images/search-icon.svg";
 
 import useInput from "../../hook/useInput";
 import GrayInput from "../common/GrayInput";
 import ProductAPI from "../../api/product";
-import { OK } from "../../constants/messages";
+import { FAILED_SEARCH, OK } from "../../constants/messages";
+import { showToast } from "../common/Toast";
+import { ERROR } from "../../constants/toast";
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,7 +55,7 @@ export default function SearchBar({ setProducts }: SearchBarProps) {
       return;
     }
 
-    alert("검색에 실패했습니다.");
+    showToast({ type: ERROR, message: FAILED_SEARCH });
   };
 
   return (

@@ -4,7 +4,9 @@ import Header from "../Header";
 import SideBar from "../mypage/SideBar";
 import { useEffect, useState } from "react";
 import UserAPI from "../../api/user";
-import { FAILED, OK } from "../../constants/messages";
+import { FAILED, FAILED_GET_USER_INFO, OK } from "../../constants/messages";
+import { showToast } from "../common/Toast";
+import { ERROR } from "../../constants/toast";
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -82,7 +84,7 @@ export default function ForMyPage({
       }
 
       if (response.result === FAILED) {
-        alert("잠시 후 다시 시도해 주십시오.");
+        showToast({ type: ERROR, message: FAILED_GET_USER_INFO });
       }
     };
 

@@ -3,12 +3,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   DEMAND_LOGIN,
   FAILED,
+  FAILED_CHARGE_POINT,
   INVALID_PAYMENT,
   OK,
 } from "../../../constants/messages";
 import styled from "styled-components";
 import UserAPI from "../../../api/user";
 import { useUser } from "../../routerTemplate/ForMyPage";
+import { showToast } from "../../common/Toast";
+import { ERROR } from "../../../constants/toast";
 import successIcon from "../../../assets/images/success_icon.svg";
 
 const Background = styled.div`
@@ -92,13 +95,12 @@ export default function SuccessPage() {
       }
 
       if (response.message === DEMAND_LOGIN) {
-        alert("로그인이 필요합니다.");
+        showToast({ type: ERROR, message: DEMAND_LOGIN });
         return;
       }
 
       if (response.result === FAILED) {
-        alert("충전 실패.");
-
+        showToast({ type: ERROR, message: FAILED_CHARGE_POINT });
         navigate(`/mypage/point/fail?message=${INVALID_PAYMENT}`);
       }
     };

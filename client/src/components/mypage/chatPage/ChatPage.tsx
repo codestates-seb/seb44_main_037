@@ -5,8 +5,16 @@ import styled from "styled-components";
 import type { ServerToClientEvents, ClientToServerEvents } from "../../../App";
 import ChatAPI from "../../../api/chat";
 import { useUser } from "../../routerTemplate/ForMyPage";
-import { DEMAND_LOGIN, FAILED, OK } from "../../../constants/messages";
+import {
+  DEMAND_LOGIN,
+  FAILED,
+  FAILED_GET_MESSAGES,
+  FAILED_SEND_MESSAGE,
+  OK,
+} from "../../../constants/messages";
 import formatCreatedAt from "../../../utils/formatCreatedAt";
+import { showToast } from "../../common/Toast";
+import { ERROR } from "../../../constants/toast";
 
 const Background = styled.div`
   display: flex;
@@ -213,12 +221,16 @@ export default function ChatPage() {
       }
 
       if (response.message === DEMAND_LOGIN) {
-        alert("로그인이 필요합니다.");
+        showToast({ type: ERROR, message: DEMAND_LOGIN });
+
         return;
       }
 
       if (response.result === FAILED) {
-        alert("메시지 내역을 불러오는 데 실패했습니다.");
+        showToast({
+          type: ERROR,
+          message: FAILED_GET_MESSAGES,
+        });
       }
     };
 
@@ -323,12 +335,12 @@ export default function ChatPage() {
     }
 
     if (response.message === DEMAND_LOGIN) {
-      alert("로그인이 필요합니다.");
+      showToast({ type: ERROR, message: DEMAND_LOGIN });
       return;
     }
 
     if (response.result === FAILED) {
-      alert("실패.");
+      showToast({ type: ERROR, message: FAILED_SEND_MESSAGE });
     }
   };
 
