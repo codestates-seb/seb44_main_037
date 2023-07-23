@@ -22,6 +22,10 @@ const productSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
+  buyer: {
+    type: ObjectId,
+    ref: "User",
+  },
   category: {
     type: String,
     required: [true, "Category cannot be blank"],

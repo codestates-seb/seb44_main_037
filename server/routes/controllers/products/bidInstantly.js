@@ -1,4 +1,5 @@
-const { INVALID_REQUEST, UNEXPECTED_ERROR, OK, INSUFFICIENT_POINT } = require("../../../constants/messages");
+const { INVALID_REQUEST, OK, INSUFFICIENT_POINT, FAILED } = require("../../../constants/messages");
+const ChatRoom = require("../../../models/ChatRoom");
 const Product = require("../../../models/Product");
 const User = require("../../../models/User");
 
@@ -31,10 +32,13 @@ async function bidInstantly(req, res, next) {
     const productFilter = { _id: product._id };
     const productUpdate = {
       isOnSale: false,
+      buyer: user._id,
       $push: { history: { bider: user._id, bidPrice: product.bidInfo.instantBidPrice, createdAt: now } }
     }
 
-    const updatedProduct = await Product.findOneAndUpdate(productFilter, productUpdate, { new: true });
+    const updatedProduct = await Product
+      .findOneAndUpdate(productFilter, productUpdate, { new: true })
+      .populate(["seller", "buyer", "history.bider"]);
 
     const buyerFilter = { _id: user._id };
     const buyerUpdate = {
@@ -68,6 +72,25 @@ async function bidInstantly(req, res, next) {
 
     await User.findOneAndUpdate(sellerFilter, sellerUpdate);
 
+    await ChatRoom.create({
+      product: {
+        _id: product._id,
+        title: product.title
+      },
+      buyer: {
+        _id: user._id,
+        nickname: user.nickname,
+        numOfViewedMessage: 0
+      },
+      seller: {
+        _id: updatedProduct.seller._id,
+        nickname: updatedProduct.seller.nickname,
+        numOfViewedMessage: 0
+      },
+      numOfMessages: 0,
+      messages: [],
+    });
+
     return res
       .status(200)
       .send({
@@ -79,7 +102,7 @@ async function bidInstantly(req, res, next) {
       next(error);
     }
 
-    next({ message: UNEXPECTED_ERROR });
+    next({ message: error });
   }
 }
 
