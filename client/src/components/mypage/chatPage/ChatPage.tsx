@@ -265,10 +265,8 @@ export default function ChatPage() {
     });
   }, [newMessage]);
 
-  const handleChatRoomClick = (roomId: string) => {
-    const target = chatRoomList.find((data: any) => data._id === roomId);
-
-    // setShowingChatRoom(target);
+  const handleChatRoomClick = (index: number) => {
+    setShowingChatRoom(chatRoomList[index]);
   };
 
   const findWhoIsTalkingTo = (myId: string, seller: any, buyer: any) => {
@@ -339,9 +337,9 @@ export default function ChatPage() {
       <Box>
         <BoldText>메시지 목록</BoldText>
         {chatRoomList.length > 0 &&
-          chatRoomList.map(({ product, buyer, seller, _id }) => (
+          chatRoomList.map(({ product, buyer, seller, _id }, index: number) => (
             <ChatRoomCard
-              onClick={() => handleChatRoomClick(_id)}
+              onClick={() => handleChatRoomClick(index)}
               key={_id}
               isSelected={_id === showingChatRoom._id}
             >
