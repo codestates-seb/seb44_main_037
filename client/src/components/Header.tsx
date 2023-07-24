@@ -22,6 +22,7 @@ const Wrapper = styled.div`
 const LogoWrapper = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Image = styled.img`
@@ -68,14 +69,16 @@ export default function Header({
     navigate("/");
   };
 
+  const handleLogoClick = async () => {
+    window.location.replace("/");
+  };
+
   return (
     <Container>
       <Wrapper>
-        <Link to="/">
-          <LogoWrapper>
-            <Image src={logoIcon} />
-          </LogoWrapper>
-        </Link>
+        <LogoWrapper onClick={handleLogoClick}>
+          <Image src={logoIcon} />
+        </LogoWrapper>
         <Link to="/products/new">
           <BigMenu>판매하기</BigMenu>
         </Link>
