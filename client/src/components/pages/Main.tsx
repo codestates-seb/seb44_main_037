@@ -124,7 +124,7 @@ export default function Main() {
         return;
       }
 
-      setProducts(response.payload.products);
+      setProducts([...response.payload.products].reverse());
     }
 
     fetchData();

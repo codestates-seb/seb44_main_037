@@ -71,6 +71,7 @@ const HistoryCard = styled.div`
 
 export default function PointPage() {
   const { userInfo } = useUser();
+  const pointHistoryList = [...userInfo.pointHistory].reverse();
 
   return (
     <Background>
@@ -80,14 +81,14 @@ export default function PointPage() {
           <div>현재 보유한 포인트</div>
           <Price isBold={true}>{userInfo.point.toLocaleString()}P</Price>
         </PointCard>
-        {userInfo.pointHistory.map(
+        {pointHistoryList.map(
           ({ title, productId, price, balance, createdAt }) => (
             <HistoryCard key={`${createdAt} + ${balance}`}>
               <LineWrapper>
                 <div>{title}</div>
                 <Price color={price > 0 ? "var(--blue)" : "var(--red)"}>{`${
                   price > 0 ? "+" : "-"
-                } ${price.toLocaleString()}`}</Price>
+                } ${price?.toLocaleString()}`}</Price>
               </LineWrapper>
               <LineWrapper>
                 <SmallText>{formatCreatedAt(createdAt)}</SmallText>
