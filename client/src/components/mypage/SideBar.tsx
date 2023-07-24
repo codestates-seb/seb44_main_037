@@ -8,8 +8,15 @@ const Wrapper = styled.div`
   align-items: center;
   min-width: 18rem;
   height: 100%;
-  padding: 2rem 2rem;
+  padding: 2rem;
   border-top: 1px solid var(--line-gray);
+
+  @media screen and (max-width: 1260px) {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 2rem;
+  }
 `;
 
 const Image = styled.img`
@@ -19,9 +26,22 @@ const Image = styled.img`
   object-fit: contain;
   border-radius: 100%;
   background-color: var(--line-gray);
+
+  @media screen and (max-width: 1260px) {
+    display: none;
+  }
 `;
 
-const CategoryName = styled.div<{
+const MenuList = styled.div`
+  @media screen and (max-width: 1260px) {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+  }
+`;
+
+const MenuName = styled.div<{
   isSelected?: boolean;
 }>`
   display: block;
@@ -36,6 +56,11 @@ const Nickname = styled.div`
   color: #474747;
   font-size: 1.7rem;
   font-weight: bold;
+  text-align: center;
+
+  @media screen and (max-width: 1260px) {
+    display: none;
+  }
 `;
 
 type SideBarProps = {
@@ -59,17 +84,17 @@ const SideBar = ({ image, nickname }: SideBarProps) => {
 
   return (
     <Wrapper>
-      <Image src={image} />
-      <Nickname>{nickname}</Nickname>
       <div>
+        <Image src={image} />
+        <Nickname>{nickname}</Nickname>
+      </div>
+      <MenuList>
         {menu.map(({ name, link }, index: number) => (
           <Link to={link} onClick={() => handleMenuClick(index)}>
-            <CategoryName isSelected={selectedMenu === index}>
-              {name}
-            </CategoryName>
+            <MenuName isSelected={selectedMenu === index}>{name}</MenuName>
           </Link>
         ))}
-      </div>
+      </MenuList>
     </Wrapper>
   );
 };

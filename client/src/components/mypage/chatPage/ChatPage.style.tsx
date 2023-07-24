@@ -9,6 +9,15 @@ export const Background = styled.div`
   padding: 4rem;
   gap: 2rem;
   background-color: var(--background);
+
+  @media screen and (max-width: 1260px) {
+    flex-direction: column;
+    padding: 3rem;
+  }
+
+  @media screen and (max-width: 450px) {
+    padding: 2rem;
+  }
 `;
 
 export const Box = styled.div`
@@ -17,6 +26,7 @@ export const Box = styled.div`
   border: 0.1rem solid var(--line-gray);
   border-radius: 0.5rem;
   background-color: #fff;
+  width: 30rem;
   height: 80vh;
 
   & > * {
@@ -29,8 +39,21 @@ export const Box = styled.div`
   }
 `;
 
+export const ChatBox = styled(Box)`
+  @media screen and (max-width: 1260px) {
+    width: 100%;
+    min-height: 50rem;
+  }
+`;
+
 export const MessageListBox = styled(Box)`
+  width: 22rem;
   overflow-y: scroll;
+
+  @media screen and (max-width: 1260px) {
+    width: 100%;
+    height: 50%;
+  }
 `;
 
 export const Title = styled.div`
@@ -57,7 +80,6 @@ export const ChatRoomCard = styled.div<{
   isSelected?: boolean;
 }>`
   display: flex;
-  width: 22rem;
   padding: 1rem;
   background-color: ${props => props.isSelected && "var(--input-gray)"};
 `;
@@ -83,7 +105,6 @@ export const LineWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 30rem;
 `;
 
 export const ProductInfo = styled.div`

@@ -22,6 +22,10 @@ const Body = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+
+  @media screen and (max-width: 1260px) {
+    flex-direction: column;
+  }
 `;
 
 const PageContainer = styled.div`

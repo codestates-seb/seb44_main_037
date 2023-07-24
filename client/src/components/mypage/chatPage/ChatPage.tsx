@@ -172,7 +172,7 @@ export default function ChatPage() {
         showingChatRoom={showingChatRoom}
         handleChatRoomClick={handleChatRoomClick}
       />
-      <S.Box>
+      <S.ChatBox>
         {showingChatRoom && (
           <>
             <S.LineWrapper>
@@ -222,7 +222,7 @@ export default function ChatPage() {
             />
           </>
         )}
-      </S.Box>
+      </S.ChatBox>
     </S.Background>
   );
 }
