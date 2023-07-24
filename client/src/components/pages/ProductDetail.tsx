@@ -5,6 +5,7 @@ import AuctionPage from "../ProductDetail/AuctionPage";
 import GeneralPage from "../ProductDetail/GeneralPage";
 import { AUCTION, GENERAL } from "../../constants/products";
 import { useGlobalContext } from "../routerTemplate/General";
+import scrollToTop from "../../utils/scrollToTop";
 
 const productAPI = new ProductAPI();
 
@@ -25,6 +26,7 @@ export default function ProductDetail() {
     };
 
     getSingleProduct();
+    scrollToTop();
   }, []);
 
   return (
