@@ -1,4 +1,4 @@
-const { INVALID_REQUEST, UNEXPECTED_ERROR, OK, INSUFFICIENT_POINT } = require("../../../constants/messages");
+const { INVALID_REQUEST, OK, INSUFFICIENT_POINT, FAILED } = require("../../../constants/messages");
 const Product = require("../../../models/Product")
 
 async function bid(req, res, next) {
@@ -60,7 +60,7 @@ async function bid(req, res, next) {
       productFilter,
       productUpdate,
       { new: true }
-    ).populate(["history.bider"]);
+    ).populate(["seller", "buyer", "history.bider"]);
 
     return res
       .status(200)
@@ -73,7 +73,7 @@ async function bid(req, res, next) {
       next(error);
     }
 
-    next({ message: UNEXPECTED_ERROR });
+    next({ message: error });
   }
 }
 

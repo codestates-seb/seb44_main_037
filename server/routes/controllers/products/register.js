@@ -82,7 +82,7 @@ async function register(req, res, next) {
     });
 
     if (saleType === AUCTION) {
-      const end = new Date(createdProduct.deadline);
+      const end = new Date(createdProduct.bidInfo.deadline);
 
       schedule.scheduleJob(end, async () => {
         const product = await Product

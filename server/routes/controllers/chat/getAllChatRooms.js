@@ -19,7 +19,7 @@ async function getAllChatRooms(req, res, next) {
         .status(400)
         .send({
           result: FAILED,
-          message: "채팅방을 찾을 수 없습니다."
+          message: "채팅 목록을 불러올 수 없습니다."
         });
     }
 
