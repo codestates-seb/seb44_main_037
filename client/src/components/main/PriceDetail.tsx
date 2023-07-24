@@ -13,20 +13,31 @@ const PriceName = styled.div`
 const Price = styled.div`
   font-size: 1rem;
   font-weight: bold;
+  color: ${props => props.color};
+`;
+
+const Description = styled.div`
+  color: var(--gray);
+  font-size: 0.8rem;
 `;
 
 type PriceDetail = {
   name: string;
   price: number;
+  color?: string;
 };
 
-export default function PriceDetail({ name, price }: PriceDetail) {
-  if (!name || !price) return;
+export default function PriceDetail({ name, price = 0, color }: PriceDetail) {
+  if (!name) return;
 
   return (
     <Wrapper>
       <PriceName>{name}</PriceName>
-      <Price>{price.toLocaleString()}원</Price>
+      {price > 0 ? (
+        <Price color={color}>{price.toLocaleString()}원</Price>
+      ) : (
+        <Description>응찰자를 기다리는 중</Description>
+      )}
     </Wrapper>
   );
 }

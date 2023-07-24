@@ -3,6 +3,7 @@ import * as S from "./productCard.style";
 import changeCategoryToKorean from "../../utils/changeCategoryToKorean";
 import PriceDetail from "./PriceDetail";
 import ProductImage from "./ProductImage";
+import formatCreatedAt from "../../utils/formatCreatedAt";
 
 type Product = {
   _id: string;
@@ -37,7 +38,7 @@ type History = {
 };
 
 export default function GeneralProductCard({ data }: ProductCardProps) {
-  const { _id: productId, images, title, price, category } = data;
+  const { _id: productId, images, title, price, category, createdAt } = data;
 
   return (
     <S.Wrapper>
@@ -48,6 +49,7 @@ export default function GeneralProductCard({ data }: ProductCardProps) {
       )}
       <S.UpperInfo>
         <S.SmallText>{changeCategoryToKorean(category)}</S.SmallText>
+        <S.SmallText>{formatCreatedAt(createdAt)}</S.SmallText>
       </S.UpperInfo>
       <Link to={`/products/${productId}`}>
         <S.Title>{title}</S.Title>

@@ -19,10 +19,8 @@ export const SmallText = styled.div`
 export const PriceBox = styled.div`
   margin-top: 0.7rem;
 
-  & > * {
-    :nth-child(2) {
-      margin-top: 0.5rem;
-    }
+  div {
+    margin: 0.1rem 0;
   }
 `;
 

@@ -65,7 +65,7 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
       <S.UpperInfo>
         <S.SmallText>{changeCategoryToKorean(category)}</S.SmallText>
         <S.SmallText color="var(--pink)">
-          {formatLeftTime(bidInfo?.deadline, "second")}
+          {formatLeftTime(bidInfo?.deadline)}
         </S.SmallText>
       </S.UpperInfo>
       <Link to={`/products/${productId}`}>
@@ -88,7 +88,11 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
         {!isFinished && (
           <>
             <PriceDetail name={"즉시낙찰가"} price={bidInfo?.instantBidPrice} />
-            <PriceDetail name={"최고입찰가"} price={highestBid?.bidPrice} />
+            <PriceDetail
+              name={"최고입찰가"}
+              price={highestBid?.bidPrice}
+              color="var(--green)"
+            />
           </>
         )}
       </S.PriceBox>
