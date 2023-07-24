@@ -4,6 +4,7 @@ import changeCategoryToKorean from "../../utils/changeCategoryToKorean";
 import PriceDetail from "./PriceDetail";
 import ProductImage from "./ProductImage";
 import formatCreatedAt from "../../utils/formatCreatedAt";
+import { NOT_ONSALE_KO } from "../../constants/products";
 
 type Product = {
   _id: string;
@@ -17,6 +18,7 @@ type Product = {
   category: string;
   deadline: number;
   createdAt: number;
+  isOnSale: boolean;
 };
 
 type ProductCardProps = {
@@ -38,13 +40,24 @@ type History = {
 };
 
 export default function GeneralProductCard({ data }: ProductCardProps) {
-  const { _id: productId, images, title, price, category, createdAt } = data;
+  const {
+    _id: productId,
+    images,
+    title,
+    price,
+    category,
+    createdAt,
+    isOnSale,
+  } = data;
 
   return (
     <S.Wrapper>
       {images && (
         <Link to={`/products/${productId}`}>
-          <ProductImage image={images[0]} />
+          {isOnSale && <ProductImage image={images[0]} />}
+          {!isOnSale && (
+            <ProductImage image={images[0]} state={NOT_ONSALE_KO} />
+          )}
         </Link>
       )}
       <S.UpperInfo>

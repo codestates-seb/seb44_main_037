@@ -19,6 +19,7 @@ type Product = {
   deadline: number;
   createdAt: number;
   history: Array<History>;
+  isOnSale: boolean;
 };
 
 type ProductCardProps = {
@@ -39,18 +40,25 @@ type History = {
 };
 
 export default function AuctionProductCard({ data }: ProductCardProps) {
-  const { _id: productId, images, title, bidInfo, category, history } = data;
+  const {
+    _id: productId,
+    images,
+    title,
+    bidInfo,
+    category,
+    history,
+    isOnSale,
+  } = data;
 
   const highestBid = history[history.length - 1];
-  const isFinished = Date.now() > bidInfo?.deadline;
   const hasSuccessfulBidder = history.length > 0;
 
   return (
     <S.Wrapper>
       {images && (
         <Link to={`/products/${productId}`}>
-          {!isFinished && <ProductImage image={images[0]} />}
-          {isFinished && (
+          {isOnSale && <ProductImage image={images[0]} />}
+          {!isOnSale && (
             <>
               {hasSuccessfulBidder && (
                 <ProductImage image={images[0]} state={BID_SUCCESS} />
@@ -72,7 +80,7 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
         <S.Title>{title}</S.Title>
       </Link>
       <S.PriceBox>
-        {isFinished && (
+        {!isOnSale && (
           <>
             {hasSuccessfulBidder && (
               <PriceDetail name={"최종낙찰가"} price={highestBid.bidPrice} />
@@ -85,7 +93,7 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
             )}
           </>
         )}
-        {!isFinished && (
+        {isOnSale && (
           <>
             <PriceDetail name={"즉시낙찰가"} price={bidInfo?.instantBidPrice} />
             <PriceDetail
