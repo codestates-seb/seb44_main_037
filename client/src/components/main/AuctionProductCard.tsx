@@ -73,7 +73,7 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
       <S.UpperInfo>
         <S.SmallText>{changeCategoryToKorean(category)}</S.SmallText>
         <S.SmallText color="var(--pink)">
-          {formatLeftTime(bidInfo?.deadline)}
+          {isOnSale ? formatLeftTime(bidInfo?.deadline) : "마감"}
         </S.SmallText>
       </S.UpperInfo>
       <Link to={`/products/${productId}`}>

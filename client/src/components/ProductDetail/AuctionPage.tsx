@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { io, Socket } from "socket.io-client";
 import type { ServerToClientEvents, ClientToServerEvents } from "../../App";
@@ -16,13 +17,13 @@ import {
   SUCCESSFUL_BID,
 } from "../../constants/messages";
 import { ERROR, SUCCESS } from "../../constants/toast";
+import { BID_FAILED, NOT_ONSALE_KO } from "../../constants/products";
 import { showToast } from "../common/Toast";
 
 import HalfButton from "../common/HalfButton";
 import PriceDetail from "../ProductDetail/PriceDetail";
 import BidInput from "./BidInput";
 import LeftTime from "./LeftTime";
-import { NOT_ONSALE_KO } from "../../constants/products";
 
 const Container = styled.div`
   display: flex;
@@ -137,6 +138,12 @@ const SmallTitle = styled.h2`
   font-weight: bold;
 `;
 
+const Description = styled.pre`
+  margin: 2rem 0;
+  font-size: 1rem;
+  line-height: 1.4rem;
+`;
+
 const Text = styled.p`
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
@@ -240,6 +247,8 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
     bid: "",
   });
 
+  const navigate = useNavigate();
+
   const latestBid = product.history[product.history.length - 1] || null;
   const isSeller = user?._id === product.seller._id;
   const leftBlanks = Array.from({ length: 4 - product.images.length });
@@ -273,7 +282,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
   }, [socket]);
 
   const handleChatClick = () => {
-    console.log("chat 클릭!");
+    navigate(`/mypage/chat`);
   };
 
   const handleBuyClick = async () => {
@@ -297,7 +306,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
   };
 
   const handleBidClick = async () => {
-    if (latestBid.bider._id === user._id) {
+    if (latestBid?.bider._id === user._id) {
       showToast({ type: ERROR, message: DOUBLE_BIDDING });
       return;
     }
@@ -358,7 +367,9 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
             {!product.isOnSale && (
               <Wrapper>
                 <MainImage src={selectedImage} isDark={true} />
-                <ImageInfo isDark={true}>{NOT_ONSALE_KO}</ImageInfo>
+                <ImageInfo isDark={true}>
+                  {hasBider ? NOT_ONSALE_KO : BID_FAILED}
+                </ImageInfo>
               </Wrapper>
             )}
             <Images>
@@ -422,6 +433,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   onClick={handleChatClick}
                   backgroundColor="var(--navy)"
                   width="100%"
+                  isUnable={true}
                 />
                 <HalfButton
                   name="즉시 낙찰받기"
@@ -448,6 +460,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   onClick={handleChatClick}
                   backgroundColor="var(--navy)"
                   width="100%"
+                  isUnable={true}
                 />
               </ButtonBar>
             )}
@@ -458,6 +471,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   onClick={isSeller ? handleRepostClick : handleChatClick}
                   backgroundColor="var(--navy)"
                   width="100%"
+                  isUnable={true}
                 />
               </ButtonBar>
             )}
@@ -466,7 +480,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
         <LowerBox>
           <LeftBox>
             <SmallTitle>상품 설명</SmallTitle>
-            <p>{product.description}</p>
+            <Description>{product.description}</Description>
           </LeftBox>
           <RightBox>
             <SmallTitle>실시간 입찰 현황</SmallTitle>
@@ -506,7 +520,9 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
             )}
             {!hasBider && (
               <BeigeBox>
-                입찰자를 기다리는 중입니다. 이 상품의 첫 입찰자가 되어 보세요!
+                {product.isOnSale
+                  ? "입찰자를 기다리는 중입니다. 이 상품의 첫 입찰자가 되어 보세요!"
+                  : "입찰자 없이 마감된 경매입니다."}
               </BeigeBox>
             )}
           </RightBox>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import formatCreatedAt from "../../utils/formatCreatedAt";
 import TradingAPI from "../../api/trading";
@@ -44,6 +45,10 @@ const LeftBox = styled.div`
 
 const RightBox = styled.div`
   flex-basis: 50%;
+
+  :nth-child(3) {
+    margin: 3rem 0;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -109,9 +114,10 @@ const BigTitle = styled.h1`
   font-weight: bold;
 `;
 
-const Description = styled.div`
+const Description = styled.pre`
   margin: 2rem 0;
   font-size: 1rem;
+  line-height: 1.4rem;
 `;
 
 const Text = styled.p`
@@ -124,6 +130,19 @@ const Text = styled.p`
 const ButtonBar = styled.div`
   display: flex;
   margin-top: 7rem;
+`;
+
+const PriceInfo = styled.div`
+  & > * {
+    display: inline;
+    margin-right: 0.5rem;
+  }
+`;
+
+const Price = styled.div`
+  color: var(--red);
+  font-size: 1.6rem;
+  font-weight: bold;
 `;
 
 const tradingAPI = new TradingAPI();
@@ -145,12 +164,10 @@ export default function GeneralPage({
 }: GeneralPageProps) {
   const [selectedImage, setSelectedImage] = useState<string>(product.images[0]);
 
+  const navigate = useNavigate();
+
   const isSeller = user?._id === product.seller._id;
   const leftBlanks = Array.from({ length: 4 - product?.images.length });
-
-  const handleChatClick = () => {
-    console.log("chat 클릭!");
-  };
 
   const handleBuyClick = async () => {
     const body = { productId: product._id };
@@ -159,6 +176,7 @@ export default function GeneralPage({
     if (response.result === OK) {
       setProduct(response.payload.product);
       showToast({ type: SUCCESS, message: SUCCESSFUL_BUY });
+      navigate(`/mypage/chat`);
     }
 
     if (response.message === DEMAND_LOGIN) {
@@ -205,15 +223,13 @@ export default function GeneralPage({
           <RightBox>
             <BigTitle>{product.title}</BigTitle>
             <Text>{formatCreatedAt(product.createdAt)}</Text>
+            <PriceInfo>
+              <Price>{`${product.price.toLocaleString()}원`}</Price>
+              <Text>배송비 포함</Text>
+            </PriceInfo>
             <Description>{product.description}</Description>
             {!isSeller && product.isOnSale && (
               <ButtonBar>
-                <HalfButton
-                  name="판매자와 연락하기"
-                  onClick={handleChatClick}
-                  backgroundColor="var(--navy)"
-                  width="100%"
-                />
                 <HalfButton
                   name="즉시 구매하기"
                   onClick={handleBuyClick}

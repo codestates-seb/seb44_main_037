@@ -313,7 +313,7 @@ export default function ProductRegister({
       </StepBox>
       <ButtonBar>
         <HalfButton
-          name="회원가입"
+          name="등록하기"
           onClick={handleSubmitClick}
           backgroundColor="var(--green)"
         />
