@@ -10,6 +10,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const productsRouter = require("./routes/products");
 const chatRoomRouter = require("./routes/chat");
+const { CLIENT_URL } = require("./config/envConfig");
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: CLIENT_URL,
   methods: ["GET", "POST", "OPTIONS", "DELETE"],
   credentials: true,
   exposedHeaders: ["token"]
