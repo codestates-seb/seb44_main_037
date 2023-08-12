@@ -1,45 +1,4 @@
-import styled from "styled-components";
-
-const Wrapper = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-`;
-
-const Label = styled.label`
-  line-height: 2.5rem;
-  flex-basis: 15%;
-  margin: 2px auto;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-`;
-
-const InputContainer = styled.div`
-  flex-basis: 85%;
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  padding: 14px 15px;
-  margin: 2px auto;
-  border: 1px solid #dadada;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  resize: none;
-`;
-
-const Message = styled.p`
-  margin: 2px auto;
-  font-size: 0.7rem;
-  color: var(--pink);
-`;
-
-const Description = styled.p`
-  margin: 5px auto;
-  font-size: 0.7rem;
-  color: var(--dark-gray);
-`;
+import * as S from "./RegisterTextarea.style";
 
 type RegisterTextareaProps = {
   form: any;
@@ -63,10 +22,10 @@ function RegisterTextarea({
   onBlur,
 }: RegisterTextareaProps) {
   return (
-    <Wrapper>
-      <Label htmlFor={name}>{label}</Label>
-      <InputContainer>
-        <Textarea
+    <S.Wrapper>
+      <S.Label htmlFor={name}>{label}</S.Label>
+      <S.InputContainer>
+        <S.Textarea
           id={name}
           name={name}
           value={form[name]}
@@ -75,10 +34,10 @@ function RegisterTextarea({
           placeholder={placeholder}
           rows={12}
         />
-        <Description>{description}</Description>
-        <Message>{message}</Message>
-      </InputContainer>
-    </Wrapper>
+        <S.Description>{description}</S.Description>
+        <S.Message>{message}</S.Message>
+      </S.InputContainer>
+    </S.Wrapper>
   );
 }
 

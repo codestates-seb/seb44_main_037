@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import * as S from "./productCard.style";
+import * as S from "./ProductCard.style";
 import changeCategoryToKorean from "../../utils/changeCategoryToKorean";
 import PriceDetail from "./PriceDetail";
 import ProductImage from "./ProductImage";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import styled from "styled-components";
+import * as S from "./AuctionPage.style";
 import { io, Socket } from "socket.io-client";
 import type { ServerToClientEvents, ClientToServerEvents } from "../../App";
 import formatCreatedAt from "../../utils/formatCreatedAt";
@@ -24,203 +24,6 @@ import HalfButton from "../common/HalfButton";
 import PriceDetail from "../ProductDetail/PriceDetail";
 import BidInput from "./BidInput";
 import LeftTime from "./LeftTime";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 1264px;
-  padding: 1.5rem 1rem;
-`;
-
-const UpperBox = styled.div`
-  display: flex;
-  width: 100%;
-  margin: 1.5rem 0;
-  gap: 2.5rem;
-
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const LowerBox = styled.div`
-  display: flex;
-  width: 100%;
-  margin: 1.5rem 0;
-  gap: 2.5rem;
-
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const LeftBox = styled.div`
-  flex-basis: 50%;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const RightBox = styled.div`
-  flex-basis: 50%;
-`;
-
-const Wrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const ImageInfo = styled.div<{ isDark: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: ${props => props.isDark && "#ffffff"};
-`;
-
-const MainImage = styled.img<{ isDark?: boolean }>`
-  width: 50%;
-  min-width: 100%;
-  max-height: 25rem;
-  margin-bottom: 1rem;
-  object-fit: contain;
-  background-color: var(--line-gray);
-  filter: ${props => props.isDark && "brightness(50%)"};
-`;
-
-const ImageWrapper = styled.div`
-  width: 100%;
-  position: relative;
-
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-  }
-`;
-
-const Images = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 1rem;
-`;
-
-const Image = styled.img<{ isSelected: boolean }>`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: ${props => props.isSelected && "0.5"};
-  cursor: pointer;
-`;
-
-const BlankBox = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: var(--line-gray);
-`;
-
-const BigTitle = styled.h1`
-  margin-top: 1rem;
-  font-size: 1.7rem;
-  font-weight: bold;
-`;
-
-const SmallTitle = styled.h2`
-  margin: 1rem 0;
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const Description = styled.pre`
-  margin: 2rem 0;
-  font-size: 1rem;
-  line-height: 1.4rem;
-`;
-
-const Text = styled.p`
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.8rem;
-  color: var(--dark-gray);
-`;
-
-const ButtonBar = styled.div`
-  display: flex;
-  margin-top: 4rem;
-`;
-
-const AuctionPriceWrapper = styled.div`
-  margin-top: 2rem;
-
-  :nth-child(3) {
-    margin-top: 2rem;
-  }
-`;
-
-const BeigeBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 1.7rem 1.5rem;
-  margin: 1rem 0;
-  background-color: var(--beige);
-  border-radius: 0.5rem;
-`;
-
-const Left = styled.div`
-  :nth-child(1) {
-    font-size: 1.1rem;
-  }
-
-  :nth-child(2) {
-    margin-top: 0.4rem;
-    font-size: 0.8rem;
-    color: var(--drak-gray);
-  }
-`;
-
-const Right = styled.div`
-  margin-top: 0.4rem;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: var(--gray);
-`;
-
-const SmallText = styled.div`
-  margin: 0.5rem 0;
-  color: var(--pink);
-  font-size: 0.8rem;
-`;
-
-const HistoryBox = styled(BeigeBox)`
-  flex-direction: column;
-`;
-
-const History = styled.div`
-  display: flex;
-  width: 100%;
-  color: var(--gray);
-  font-size: 1rem;
-
-  & > * {
-    flex-basis: calc(100% / 3);
-    margin: 0.3rem 0;
-    text-align: center;
-  }
-`;
-
-const HistoryTitle = styled(History)`
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: var(--drak-gray);
-`;
 
 const tradingAPI = new TradingAPI();
 
@@ -360,41 +163,41 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
 
   return (
     <>
-      <Container>
-        <UpperBox>
-          <LeftBox>
-            {product.isOnSale && <MainImage src={selectedImage} />}
+      <S.Container>
+        <S.UpperBox>
+          <S.LeftBox>
+            {product.isOnSale && <S.MainImage src={selectedImage} />}
             {!product.isOnSale && (
-              <Wrapper>
-                <MainImage src={selectedImage} isDark={true} />
-                <ImageInfo isDark={true}>
+              <S.Wrapper>
+                <S.MainImage src={selectedImage} isDark={true} />
+                <S.ImageInfo isDark={true}>
                   {hasBider ? NOT_ONSALE_KO : BID_FAILED}
-                </ImageInfo>
-              </Wrapper>
+                </S.ImageInfo>
+              </S.Wrapper>
             )}
-            <Images>
+            <S.Images>
               {product.images.map((url: string) => (
-                <ImageWrapper key={url}>
-                  <Image
+                <S.ImageWrapper key={url}>
+                  <S.Image
                     src={url}
                     alt=""
                     isSelected={url === selectedImage ? true : false}
                     onClick={() => setSelectedImage(url)}
                   />
-                </ImageWrapper>
+                </S.ImageWrapper>
               ))}
               {leftBlanks.map((el, index) => (
-                <ImageWrapper key={index}>
-                  <BlankBox />
-                </ImageWrapper>
+                <S.ImageWrapper key={index}>
+                  <S.BlankBox />
+                </S.ImageWrapper>
               ))}
-            </Images>
-          </LeftBox>
-          <RightBox>
-            <BigTitle>{product.title}</BigTitle>
-            <Text>{formatCreatedAt(product.createdAt)}</Text>
+            </S.Images>
+          </S.LeftBox>
+          <S.RightBox>
+            <S.BigTitle>{product.title}</S.BigTitle>
+            <S.Text>{formatCreatedAt(product.createdAt)}</S.Text>
 
-            <AuctionPriceWrapper>
+            <S.AuctionPriceWrapper>
               <PriceDetail
                 color="var(--gray)"
                 name="시작가"
@@ -415,7 +218,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                 name="즉시낙찰가"
                 price={product.bidInfo.instantBidPrice}
               />
-            </AuctionPriceWrapper>
+            </S.AuctionPriceWrapper>
 
             {product.isOnSale && !isSeller && (
               <BidInput
@@ -427,7 +230,7 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
             )}
 
             {product.isOnSale && !isSeller && (
-              <ButtonBar>
+              <S.ButtonBar>
                 <HalfButton
                   name="판매자와 연락하기"
                   onClick={handleChatClick}
@@ -441,20 +244,20 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   backgroundColor="var(--green)"
                   width="100%"
                 />
-              </ButtonBar>
+              </S.ButtonBar>
             )}
             {product.isOnSale && isSeller && (
-              <ButtonBar>
+              <S.ButtonBar>
                 <HalfButton
                   name="경매 조기종료"
                   onClick={handleCloseAuctionClick}
                   backgroundColor="var(--red)"
                   width="100%"
                 />
-              </ButtonBar>
+              </S.ButtonBar>
             )}
             {!product.isOnSale && hasBider && (
-              <ButtonBar>
+              <S.ButtonBar>
                 <HalfButton
                   name={isSeller ? "구매자와 연락하기" : "판매자와 연락하기"}
                   onClick={handleChatClick}
@@ -462,10 +265,10 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   width="100%"
                   isUnable={true}
                 />
-              </ButtonBar>
+              </S.ButtonBar>
             )}
             {!product.isOnSale && !hasBider && (
-              <ButtonBar>
+              <S.ButtonBar>
                 <HalfButton
                   name={isSeller ? "일반 판매로 전환하기" : "판매자와 연락하기"}
                   onClick={isSeller ? handleRepostClick : handleChatClick}
@@ -473,61 +276,61 @@ export default function AuctionPage({ product, setProduct }: AuctionPageProps) {
                   width="100%"
                   isUnable={true}
                 />
-              </ButtonBar>
+              </S.ButtonBar>
             )}
-          </RightBox>
-        </UpperBox>
-        <LowerBox>
-          <LeftBox>
-            <SmallTitle>상품 설명</SmallTitle>
-            <Description>{product.description}</Description>
-          </LeftBox>
-          <RightBox>
-            <SmallTitle>실시간 입찰 현황</SmallTitle>
-            <SmallText>
+          </S.RightBox>
+        </S.UpperBox>
+        <S.LowerBox>
+          <S.LeftBox>
+            <S.SmallTitle>상품 설명</S.SmallTitle>
+            <S.Description>{product.description}</S.Description>
+          </S.LeftBox>
+          <S.RightBox>
+            <S.SmallTitle>실시간 입찰 현황</S.SmallTitle>
+            <S.SmallText>
               {product.isOnSale ? (
                 <LeftTime deadline={product.bidInfo.deadline} />
               ) : (
                 "마감"
               )}
-            </SmallText>
+            </S.SmallText>
             {hasBider && (
               <>
-                <BeigeBox>
-                  <Left>
+                <S.BeigeBox>
+                  <S.Left>
                     <div>현재 최고 입찰자</div>
                     <div>{formatCreatedAt(latestBid.createdAt)}</div>
-                  </Left>
-                  <Right>{latestBid.bider.nickname}</Right>
-                </BeigeBox>
-                <HistoryBox>
-                  <HistoryTitle>
+                  </S.Left>
+                  <S.Right>{latestBid.bider.nickname}</S.Right>
+                </S.BeigeBox>
+                <S.HistoryBox>
+                  <S.HistoryTitle>
                     <div>입찰 일시</div>
                     <div>입찰가</div>
                     <div>입찰자명</div>
-                  </HistoryTitle>
+                  </S.HistoryTitle>
                   {[...product.history]
                     .reverse()
                     .map(({ bider, bidPrice, createdAt, _id }: History) => (
-                      <History key={_id}>
+                      <S.History key={_id}>
                         <div>{formatCreatedAt(createdAt)}</div>
                         <div>{`${bidPrice.toLocaleString()}원`}</div>
                         <div>{bider.nickname}</div>
-                      </History>
+                      </S.History>
                     ))}
-                </HistoryBox>
+                </S.HistoryBox>
               </>
             )}
             {!hasBider && (
-              <BeigeBox>
+              <S.BeigeBox>
                 {product.isOnSale
                   ? "입찰자를 기다리는 중입니다. 이 상품의 첫 입찰자가 되어 보세요!"
                   : "입찰자 없이 마감된 경매입니다."}
-              </BeigeBox>
+              </S.BeigeBox>
             )}
-          </RightBox>
-        </LowerBox>
-      </Container>
+          </S.RightBox>
+        </S.LowerBox>
+      </S.Container>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import styled from "styled-components";
+import * as S from "./Main.style";
 import ProductAPI from "../../api/product";
 import { OK } from "../../constants/messages";
 import {
@@ -14,90 +14,6 @@ import SearchBar from "../main/SearchBar";
 import DropDown from "../common/DropDown";
 import AuctionProductCard from "../main/AuctionProductCard";
 import GeneralProductCard from "../main/GeneralProductCard";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 1264px;
-  padding: 1.5rem 1rem;
-`;
-
-const Guide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 20rem;
-  padding: 1.5rem 1rem;
-  background-color: var(--beige);
-
-  :nth-child(1) {
-    margin-bottom: 1rem;
-    font-size: 1.7rem;
-    font-weight: bold;
-  }
-
-  :nth-child(2) {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--pink);
-  }
-`;
-
-const MenuBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 1.5rem;
-  gap: 1rem;
-
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const SearchBarWrapper = styled.div`
-  flex-basis: 50%;
-  display: flex;
-  width: 100%;
-`;
-
-const CategoryBar = styled.div`
-  flex-basis: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: 1rem;
-`;
-
-const Wrapper = styled.ul`
-  display: grid;
-  gap: 2rem;
-
-  @media screen and (min-width: 450px) {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-
-  @media screen and (min-width: 560px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media screen and (min-width: 1024px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  @media screen and (min-width: 1280px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  @media screen and (min-width: 1536px) {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-`;
 
 const productAPI = new ProductAPI();
 
@@ -132,16 +48,16 @@ export default function Main() {
 
   return (
     <>
-      <Guide>
+      <S.Guide>
         <div>굿즈헙이 처음이라면?</div>
         <div>가이드 보러 가기</div>
-      </Guide>
-      <Container>
-        <MenuBar>
-          <SearchBarWrapper>
+      </S.Guide>
+      <S.Container>
+        <S.MenuBar>
+          <S.SearchBarWrapper>
             <SearchBar setProducts={setProducts} />
-          </SearchBarWrapper>
-          <CategoryBar>
+          </S.SearchBarWrapper>
+          <S.CategoryBar>
             <DropDown
               optionList={categoryList}
               state={selectedCategory}
@@ -157,9 +73,9 @@ export default function Main() {
               state={selectedStatus}
               setState={setSelectedStatus}
             />
-          </CategoryBar>
-        </MenuBar>
-        <Wrapper>
+          </S.CategoryBar>
+        </S.MenuBar>
+        <S.Wrapper>
           {products.map((product: any) =>
             product.saleType === AUCTION ? (
               <AuctionProductCard data={product} />
@@ -167,8 +83,8 @@ export default function Main() {
               <GeneralProductCard data={product} />
             )
           )}
-        </Wrapper>
-      </Container>
+        </S.Wrapper>
+      </S.Container>
     </>
   );
 }

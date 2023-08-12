@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import searchIcon from "../../assets/images/search-icon.svg";
+import * as S from "./SearchBar.style";
 
 import useInput from "../../hook/useInput";
 import GrayInput from "../common/GrayInput";
@@ -7,32 +7,6 @@ import ProductAPI from "../../api/product";
 import { FAILED_SEARCH, OK } from "../../constants/messages";
 import { showToast } from "../common/Toast";
 import { ERROR } from "../../constants/toast";
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 2.5rem;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 5px;
-`;
-
-const FormIcon = styled.img.attrs(props => ({
-  src: `${props.src}`,
-  alt: "",
-}))`
-  position: absolute;
-  right: 1rem;
-  width: 1.2rem;
-  cursor: pointer;
-`;
 
 type SearchBarProps = {
   setProducts: any;
@@ -59,16 +33,16 @@ export default function SearchBar({ setProducts }: SearchBarProps) {
   };
 
   return (
-    <Wrapper>
-      <InputWrapper>
-        <FormIcon onClick={handleClick} src={searchIcon} alt="검색" />
+    <S.Wrapper>
+      <S.InputWrapper>
+        <S.FormIcon onClick={handleClick} src={searchIcon} alt="검색" />
         <GrayInput
           form={form}
           onChange={onChange}
           name="searchValue"
           placeholder="찾는 물건이 있으신가요?"
         />
-      </InputWrapper>
-    </Wrapper>
+      </S.InputWrapper>
+    </S.Wrapper>
   );
 }

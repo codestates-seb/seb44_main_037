@@ -1,46 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import * as S from "./Header.style";
 
 import UserAPI from "../api/user";
 import logoIcon from "../assets/images/GoodsHub.svg";
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 1264px;
-  padding: 1.5rem 1rem;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: end;
-  gap: 1rem;
-`;
-
-const LogoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const Image = styled.img`
-  height: 1.2rem;
-`;
-
-const BigMenu = styled.div`
-  color: #474747;
-  font-size: 1rem;
-  font-weight: bold;
-`;
-
-const SmallMenu = styled.div`
-  color: #474747;
-  font-size: 0.8rem;
-  font-weight: bold;
-  cursor: pointer;
-`;
 
 const userAPI = new UserAPI();
 
@@ -74,28 +37,30 @@ export default function Header({
   };
 
   return (
-    <Container>
-      <Wrapper>
-        <LogoWrapper onClick={handleLogoClick}>
-          <Image src={logoIcon} />
-        </LogoWrapper>
+    <S.Container>
+      <S.Wrapper>
+        <S.LogoWrapper onClick={handleLogoClick}>
+          <S.Image src={logoIcon} />
+        </S.LogoWrapper>
         <Link to="/products/new">
-          <BigMenu>판매하기</BigMenu>
+          <S.BigMenu>판매하기</S.BigMenu>
         </Link>
-      </Wrapper>
-      <Wrapper>
+      </S.Wrapper>
+      <S.Wrapper>
         {!isLogin && (
           <Link to="/user/login">
-            <SmallMenu>로그인/회원가입</SmallMenu>
+            <S.SmallMenu>로그인/회원가입</S.SmallMenu>
           </Link>
         )}
         {isLogin && (
           <Link to="/mypage">
-            <SmallMenu>마이페이지</SmallMenu>
+            <S.SmallMenu>마이페이지</S.SmallMenu>
           </Link>
         )}
-        {isLogin && <SmallMenu onClick={handleLogoutClick}>로그아웃</SmallMenu>}
-      </Wrapper>
-    </Container>
+        {isLogin && (
+          <S.SmallMenu onClick={handleLogoutClick}>로그아웃</S.SmallMenu>
+        )}
+      </S.Wrapper>
+    </S.Container>
   );
 }

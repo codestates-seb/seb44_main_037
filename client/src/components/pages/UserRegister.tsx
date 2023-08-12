@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import styled from "styled-components";
+import * as S from "./UserRegister.style";
 import useInput from "../../hook/useInput";
 
 import UserAPI from "../../api/user";
@@ -19,42 +19,6 @@ import { ERROR } from "../../constants/toast";
 import RegisterInput from "../common/RegisterInput";
 import ProfileImage from "../userRegister/ProfileImage";
 import HalfButton from "../common/HalfButton";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100% - 4.2rem);
-  padding: 1.5rem 1rem;
-  background-color: var(--background);
-`;
-
-const AlignWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* width: 800px; */
-  padding: 1.5rem 1rem;
-
-  > * {
-    &:nth-child(3) {
-      margin-top: 3rem;
-      margin-bottom: 1.5rem;
-    }
-  }
-`;
-
-const Title = styled.h1`
-  color: #474747;
-  font-size: 1.7rem;
-  font-weight: bold;
-  margin-bottom: 3rem;
-`;
-
-const ButtonBar = styled.div`
-  margin-top: 7rem;
-`;
 
 const userAPI = new UserAPI();
 
@@ -114,9 +78,9 @@ export default function UserRegister({
   };
 
   const handleSubmitClick = async () => {
-    const isFormValid = validateForm();
+    const isValidForm = validateForm();
 
-    if (isFormValid && imageFile && form.email) {
+    if (isValidForm && imageFile && form.email) {
       const body = {
         nickname: form.nickname,
         image: imageFile,
@@ -147,9 +111,9 @@ export default function UserRegister({
 
   return (
     <>
-      <Container>
-        <AlignWrapper>
-          <Title>회원가입</Title>
+      <S.Container>
+        <S.AlignWrapper>
+          <S.Title>회원가입</S.Title>
           <ProfileImage
             imageUrl={thumbnail}
             handleFileChange={handleFileChange}
@@ -172,7 +136,7 @@ export default function UserRegister({
             size="20rem"
             isReadOnly={true}
           />
-          <ButtonBar>
+          <S.ButtonBar>
             <HalfButton
               name="회원가입"
               onClick={handleSubmitClick}
@@ -183,9 +147,9 @@ export default function UserRegister({
               onClick={handleCancelClick}
               backgroundColor="var(--red)"
             />
-          </ButtonBar>
-        </AlignWrapper>
-      </Container>
+          </S.ButtonBar>
+        </S.AlignWrapper>
+      </S.Container>
     </>
   );
 }

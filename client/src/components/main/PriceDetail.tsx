@@ -1,25 +1,4 @@
-import { styled } from "styled-components";
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const PriceName = styled.div`
-  font-size: 0.9rem;
-`;
-
-const Price = styled.div`
-  font-size: 1rem;
-  font-weight: bold;
-  color: ${props => props.color};
-`;
-
-const Description = styled.div`
-  color: var(--gray);
-  font-size: 0.8rem;
-`;
+import * as S from "./PriceDetail.style";
 
 type PriceDetail = {
   name: string;
@@ -31,13 +10,13 @@ export default function PriceDetail({ name, price = 0, color }: PriceDetail) {
   if (!name) return;
 
   return (
-    <Wrapper>
-      <PriceName>{name}</PriceName>
+    <S.Wrapper>
+      <S.PriceName>{name}</S.PriceName>
       {price > 0 ? (
-        <Price color={color}>{price.toLocaleString()}원</Price>
+        <S.Price color={color}>{price.toLocaleString()}원</S.Price>
       ) : (
-        <Description>응찰자를 기다리는 중</Description>
+        <S.Description>응찰자를 기다리는 중</S.Description>
       )}
-    </Wrapper>
+    </S.Wrapper>
   );
 }

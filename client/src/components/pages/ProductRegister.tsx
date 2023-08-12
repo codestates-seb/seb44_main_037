@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import styled from "styled-components";
+import * as S from "./ProductRegister.style";
 import {
   categoryRegisterList,
   deadlineList,
@@ -33,49 +33,6 @@ import HalfButton from "../common/HalfButton";
 import ProductImage from "../productRegister/ProductImage";
 import ProductAPI from "../../api/product";
 import changeTermsToKorean from "../../utils/changeTermsToEnglish";
-
-const Background = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem 1rem;
-  background-color: var(--background);
-`;
-
-const BigTitle = styled.h1`
-  margin-top: 5rem;
-  color: var(--dark-gray);
-  font-size: 1.7rem;
-  font-weight: bold;
-`;
-
-const StepBox = styled.div`
-  margin: 3rem 0;
-
-  h2 {
-    margin-bottom: 1rem;
-    color: var(--dark-gray);
-    font-size: 1.1rem;
-    font-weight: bold;
-  }
-
-  & > div {
-    width: 60rem;
-    padding-left: 2rem;
-  }
-`;
-
-const DropDownWrapper = styled.div`
-  display: flex;
-  margin-bottom: 2rem;
-`;
-
-const ButtonBar = styled.div`
-  margin-top: 7rem;
-`;
 
 const productAPI = new ProductAPI();
 
@@ -206,27 +163,27 @@ export default function ProductRegister({
   };
 
   return (
-    <Background>
-      <BigTitle>판매상품 등록하기</BigTitle>
-      <StepBox>
+    <S.Background>
+      <S.BigTitle>판매상품 등록하기</S.BigTitle>
+      <S.StepBox>
         <h2>Step 1. 카테고리 선택하기</h2>
-        <DropDownWrapper>
+        <S.DropDownWrapper>
           <DropDown
             optionList={categoryRegisterList}
             state={selectedCategory}
             setState={setSelectedCategory}
           />
-        </DropDownWrapper>
-      </StepBox>
-      <StepBox>
+        </S.DropDownWrapper>
+      </S.StepBox>
+      <S.StepBox>
         <h2>Step 2. 사진 첨부하기</h2>
         <InfoText text={IMAGE_GUIDE} />
         <ProductImage
           imageUrlList={displayingImages}
           handleFileChange={handleFileChange}
         />
-      </StepBox>
-      <StepBox>
+      </S.StepBox>
+      <S.StepBox>
         <h2>Step 3. 세부 정보 작성하기</h2>
         <RegisterInput
           form={form}
@@ -246,16 +203,16 @@ export default function ProductRegister({
           message={failureReason["description"]}
           description={DESCRIPTION_GUIDE}
         />
-      </StepBox>
-      <StepBox>
+      </S.StepBox>
+      <S.StepBox>
         <h2>Step 4. 판매유형 및 가격 설정하기</h2>
-        <DropDownWrapper>
+        <S.DropDownWrapper>
           <DropDown
             optionList={typeRegisterist}
             state={selectedType}
             setState={setSelectedType}
           />
-        </DropDownWrapper>
+        </S.DropDownWrapper>
         {isGeneralType && (
           <RegisterInput
             form={form}
@@ -301,17 +258,17 @@ export default function ProductRegister({
               size="15rem"
               isPrice={true}
             />
-            <DropDownWrapper>
+            <S.DropDownWrapper>
               <DropDown
                 optionList={deadlineList}
                 state={deadline}
                 setState={setDeadline}
               />
-            </DropDownWrapper>
+            </S.DropDownWrapper>
           </>
         )}
-      </StepBox>
-      <ButtonBar>
+      </S.StepBox>
+      <S.ButtonBar>
         <HalfButton
           name="등록하기"
           onClick={handleSubmitClick}
@@ -322,7 +279,7 @@ export default function ProductRegister({
           onClick={handleCancelClick}
           backgroundColor="var(--red)"
         />
-      </ButtonBar>
-    </Background>
+      </S.ButtonBar>
+    </S.Background>
   );
 }

@@ -7,61 +7,12 @@ import {
   INVALID_PAYMENT,
   OK,
 } from "../../../constants/messages";
-import styled from "styled-components";
 import UserAPI from "../../../api/user";
+import * as S from "./SuccessPage.style";
 import { useUser } from "../../routerTemplate/ForMyPage";
 import { showToast } from "../../common/Toast";
 import { ERROR } from "../../../constants/toast";
 import successIcon from "../../../assets/images/success_icon.svg";
-
-const Background = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding-bottom: 8rem;
-  gap: 2rem;
-  color: #474747;
-  background-color: var(--background);
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const SuccessIcon = styled.img`
-  width: 12rem;
-  opacity: 0.5;
-`;
-
-const Title = styled.h1`
-  padding: 0 2rem 1.5rem 2rem;
-  margin: 2rem 0;
-  color: var(--green);
-  font-size: 2rem;
-  font-weight: bold;
-`;
-
-const Description = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.1rem;
-  font-weight: bold;
-  width: 20rem;
-  margin: 0.5rem 0;
-
-  :nth-child(1) {
-    margin-right: 1rem;
-  }
-
-  :nth-child(2) {
-    color: var(--blue);
-  }
-`;
 
 const userAPI = new UserAPI();
 
@@ -109,22 +60,22 @@ export default function SuccessPage() {
   }, []);
 
   return (
-    <Background>
+    <S.Background>
       {isSuccess && (
-        <Wrapper>
-          <SuccessIcon src={successIcon} />
-          <Title>결제 성공</Title>
-          <Description>
+        <S.Wrapper>
+          <S.SuccessIcon src={successIcon} />
+          <S.Title>결제 성공</S.Title>
+          <S.Description>
             <div>결제 금액</div>
             <div>{`${price.toLocaleString()}원`}</div>
-          </Description>
-          <Description>
+          </S.Description>
+          <S.Description>
             <div>결제 후 나의 포인트</div>
             <div>{`${userInfo.point.toLocaleString()}P`}</div>
-          </Description>
-        </Wrapper>
+          </S.Description>
+        </S.Wrapper>
       )}
       {!isSuccess && <div>결제 진행중입니다...</div>}
-    </Background>
+    </S.Background>
   );
 }
