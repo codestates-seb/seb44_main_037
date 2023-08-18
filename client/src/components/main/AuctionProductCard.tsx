@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Product } from "product";
 import * as S from "./ProductCard.style";
 import formatLeftTime from "../../utils/formatLeftTime";
 import changeCategoryToKorean from "../../utils/changeCategoryToKorean";
@@ -6,37 +7,8 @@ import PriceDetail from "./PriceDetail";
 import ProductImage from "./ProductImage";
 import { BID_FAILED, BID_SUCCESS } from "../../constants/products";
 
-type Product = {
-  _id: string;
-  seller: object;
-  images: Array<string>;
-  title: string;
-  description: string;
-  saleType: string;
-  price: number;
-  bidInfo: BidInfo;
-  category: string;
-  deadline: number;
-  createdAt: number;
-  history: Array<History>;
-  isOnSale: boolean;
-};
-
 type ProductCardProps = {
   data: Product;
-};
-
-type BidInfo = {
-  instantBidPrice: number;
-  startPrice: number;
-  bidUnit: number;
-  deadline: number;
-};
-
-type History = {
-  bider: object;
-  date: number;
-  bidPrice: number;
 };
 
 export default function AuctionProductCard({ data }: ProductCardProps) {

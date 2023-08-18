@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { Product } from "product";
 import * as S from "./Main.style";
 import ProductAPI from "../../api/product";
 import { OK } from "../../constants/messages";
@@ -18,12 +19,12 @@ import GeneralProductCard from "../main/GeneralProductCard";
 const productAPI = new ProductAPI();
 
 export default function Main() {
-  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(ALL_KO);
   const [selectedType, setSelectedType] = useState(ALL_KO);
   const [selectedStatus, setSelectedStatus] = useState(ALL_KO);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  const [products, setProducts] = useState<any>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +34,7 @@ export default function Main() {
         status: selectedStatus,
       };
 
-      const response: any = await productAPI.getAllProducts(params);
+      const response = await productAPI.getAllProducts(params);
 
       if (response.result !== OK) {
         navigate("/error");
@@ -76,7 +77,7 @@ export default function Main() {
           </S.CategoryBar>
         </S.MenuBar>
         <S.Wrapper>
-          {products.map((product: any) =>
+          {products.map(product =>
             product.saleType === AUCTION ? (
               <AuctionProductCard data={product} />
             ) : (
