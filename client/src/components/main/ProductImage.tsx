@@ -1,26 +1,39 @@
-import { BID_FAILED, BID_SUCCESS, SOLD } from "../../constants/products";
-import * as S from "./ProductImage.style";
+import { Link } from "react-router-dom";
+import Image from "./Image";
+import {
+  AUCTION,
+  BID_FAILED,
+  BID_SUCCESS,
+  GENERAL,
+  NOT_ONSALE_KO,
+} from "../../constants/products";
 
-type ProductImageProps = {
+type AuctionProductProps = {
+  productId: string;
   image: string;
-  state?: State;
+  isOnSale: boolean;
+  saleType: string;
+  hasSuccessfulBidder?: boolean;
 };
 
-type State = typeof BID_FAILED | typeof BID_SUCCESS | typeof SOLD | "";
-
-export default function ProductImage({ image, state = "" }: ProductImageProps) {
-  if (state === "") {
-    return (
-      <S.Wrapper>
-        <S.Image src={image} isDark={false} />
-      </S.Wrapper>
-    );
-  }
+export default function ProductImage({
+  productId,
+  image,
+  isOnSale,
+  saleType,
+  hasSuccessfulBidder,
+}: AuctionProductProps) {
+  const auctionState = hasSuccessfulBidder ? BID_SUCCESS : BID_FAILED;
 
   return (
-    <S.Wrapper>
-      <S.Image src={image} isDark={true} />
-      <S.Text isDark={true}>{state}</S.Text>
-    </S.Wrapper>
+    <Link to={`/products/${productId}`}>
+      {isOnSale && <Image image={image} />}
+      {!isOnSale && saleType === AUCTION && (
+        <Image image={image} state={auctionState} />
+      )}
+      {!isOnSale && saleType === GENERAL && (
+        <Image image={image} state={NOT_ONSALE_KO} />
+      )}
+    </Link>
   );
 }

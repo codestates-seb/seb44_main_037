@@ -3,9 +3,8 @@ import { Product } from "product";
 import * as S from "./ProductCard.style";
 import formatLeftTime from "../../utils/formatLeftTime";
 import changeCategoryToKorean from "../../utils/changeCategoryToKorean";
-import PriceDetail from "./PriceDetail";
 import ProductImage from "./ProductImage";
-import { BID_FAILED, BID_SUCCESS } from "../../constants/products";
+import PriceInfo from "./PriceInfo";
 
 type ProductCardProps = {
   data: Product;
@@ -20,6 +19,7 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
     category,
     history,
     isOnSale,
+    saleType,
   } = data;
 
   const highestBid = history[history.length - 1];
@@ -28,19 +28,13 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
   return (
     <S.Wrapper>
       {images && (
-        <Link to={`/products/${productId}`}>
-          {isOnSale && <ProductImage image={images[0]} />}
-          {!isOnSale && (
-            <>
-              {hasSuccessfulBidder && (
-                <ProductImage image={images[0]} state={BID_SUCCESS} />
-              )}
-              {!hasSuccessfulBidder && (
-                <ProductImage image={images[0]} state={BID_FAILED} />
-              )}
-            </>
-          )}
-        </Link>
+        <ProductImage
+          productId={productId}
+          image={images[0]}
+          isOnSale={isOnSale}
+          hasSuccessfulBidder={hasSuccessfulBidder}
+          saleType={saleType}
+        />
       )}
       <S.UpperInfo>
         <S.SmallText>{changeCategoryToKorean(category)}</S.SmallText>
@@ -52,29 +46,12 @@ export default function AuctionProductCard({ data }: ProductCardProps) {
         <S.Title>{title}</S.Title>
       </Link>
       <S.PriceBox>
-        {!isOnSale && (
-          <>
-            {hasSuccessfulBidder && (
-              <PriceDetail name={"최종낙찰가"} price={highestBid.bidPrice} />
-            )}
-            {!hasSuccessfulBidder && (
-              <PriceDetail
-                name={"즉시낙찰가"}
-                price={bidInfo.instantBidPrice}
-              />
-            )}
-          </>
-        )}
-        {isOnSale && (
-          <>
-            <PriceDetail name={"즉시낙찰가"} price={bidInfo?.instantBidPrice} />
-            <PriceDetail
-              name={"최고입찰가"}
-              price={highestBid?.bidPrice}
-              color="var(--green)"
-            />
-          </>
-        )}
+        <PriceInfo
+          isOnSale={isOnSale}
+          bidInfo={bidInfo}
+          highestBid={highestBid}
+          hasSuccessfulBidder={hasSuccessfulBidder}
+        />
       </S.PriceBox>
     </S.Wrapper>
   );

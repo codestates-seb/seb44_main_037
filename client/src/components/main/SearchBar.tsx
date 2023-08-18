@@ -1,4 +1,5 @@
 import searchIcon from "../../assets/images/search-icon.svg";
+import { Product } from "product";
 import * as S from "./SearchBar.style";
 
 import useInput from "../../hook/useInput";
@@ -7,22 +8,19 @@ import ProductAPI from "../../api/product";
 import { FAILED_SEARCH, OK } from "../../constants/messages";
 import { showToast } from "../common/Toast";
 import { ERROR } from "../../constants/toast";
-
 type SearchBarProps = {
-  setProducts: any;
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
 
 const productAPI = new ProductAPI();
 
 export default function SearchBar({ setProducts }: SearchBarProps) {
-  const [form, onChange, reset] = useInput({
+  const [form, onChange] = useInput({
     searchValue: "",
   });
 
   const handleClick = async () => {
-    const response: any = await productAPI.getProductsByKeyword(
-      form.searchValue
-    );
+    const response = await productAPI.getProductsByKeyword(form.searchValue);
 
     if (response.result === OK) {
       setProducts(response.payload.products);

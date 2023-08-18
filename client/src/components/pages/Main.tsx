@@ -9,12 +9,11 @@ import {
   categoryList,
   typeList,
   statusList,
-  AUCTION,
 } from "../../constants/products";
 import SearchBar from "../main/SearchBar";
 import DropDown from "../common/DropDown";
-import AuctionProductCard from "../main/AuctionProductCard";
-import GeneralProductCard from "../main/GeneralProductCard";
+import ProductCardList from "../main/ProductCardList";
+import Banner from "../main/Banner";
 
 const productAPI = new ProductAPI();
 
@@ -49,10 +48,7 @@ export default function Main() {
 
   return (
     <>
-      <S.Guide>
-        <div>굿즈헙이 처음이라면?</div>
-        <div>가이드 보러 가기</div>
-      </S.Guide>
+      <Banner />
       <S.Container>
         <S.MenuBar>
           <S.SearchBarWrapper>
@@ -77,13 +73,7 @@ export default function Main() {
           </S.CategoryBar>
         </S.MenuBar>
         <S.Wrapper>
-          {products.map(product =>
-            product.saleType === AUCTION ? (
-              <AuctionProductCard data={product} />
-            ) : (
-              <GeneralProductCard data={product} />
-            )
-          )}
+          <ProductCardList products={products} />
         </S.Wrapper>
       </S.Container>
     </>

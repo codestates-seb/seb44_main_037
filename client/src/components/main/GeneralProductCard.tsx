@@ -5,7 +5,6 @@ import changeCategoryToKorean from "../../utils/changeCategoryToKorean";
 import PriceDetail from "./PriceDetail";
 import ProductImage from "./ProductImage";
 import formatCreatedAt from "../../utils/formatCreatedAt";
-import { NOT_ONSALE_KO } from "../../constants/products";
 
 type ProductCardProps = {
   data: Product;
@@ -20,17 +19,18 @@ export default function GeneralProductCard({ data }: ProductCardProps) {
     category,
     createdAt,
     isOnSale,
+    saleType,
   } = data;
 
   return (
     <S.Wrapper>
       {images && (
-        <Link to={`/products/${productId}`}>
-          {isOnSale && <ProductImage image={images[0]} />}
-          {!isOnSale && (
-            <ProductImage image={images[0]} state={NOT_ONSALE_KO} />
-          )}
-        </Link>
+        <ProductImage
+          productId={productId}
+          image={images[0]}
+          isOnSale={isOnSale}
+          saleType={saleType}
+        />
       )}
       <S.UpperInfo>
         <S.SmallText>{changeCategoryToKorean(category)}</S.SmallText>
