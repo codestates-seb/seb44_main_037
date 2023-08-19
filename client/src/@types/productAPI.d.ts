@@ -17,6 +17,8 @@ declare module "productAPI" {
     headers?: any;
   };
 
+  export type ResponseState<P> = SuccessState<P> | FailState;
+
   export type ParamsOfGetAllProducts = {
     category: string;
     type: string;

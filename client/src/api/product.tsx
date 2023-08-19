@@ -6,6 +6,7 @@ import {
   PayloadOfRegisterProduct,
   BodyOfRegisterProduct,
   ParamsOfGetAllProducts,
+  ResponseState,
 } from "productAPI";
 import createError from "../utils/createError";
 import {
@@ -48,7 +49,7 @@ export default class ProductAPI {
 
   async getAllProducts(
     params: ParamsOfGetAllProducts
-  ): Promise<SuccessState<AllProductsPayload> | FailState> {
+  ): Promise<ResponseState<AllProductsPayload>> {
     const res = await this.searchAllProducts(params);
 
     if (res.status !== 200) {
@@ -60,7 +61,7 @@ export default class ProductAPI {
 
   private async searchAllProducts(
     params: ParamsOfGetAllProducts
-  ): Promise<SuccessState<AllProductsPayload> | FailState> {
+  ): Promise<ResponseState<AllProductsPayload>> {
     return this.httpClient
       .get("products", {
         params,
@@ -110,7 +111,7 @@ export default class ProductAPI {
     body: BodyOfRegisterProduct,
     userId: string,
     accessToken: string
-  ): Promise<SuccessState<PayloadOfRegisterProduct> | FailState> {
+  ): Promise<ResponseState<PayloadOfRegisterProduct>> {
     const formData = new FormData();
 
     body.images.forEach(image => {

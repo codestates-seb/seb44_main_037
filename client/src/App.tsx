@@ -78,13 +78,7 @@ export default function App() {
         },
         {
           path: "products/new",
-          element: (
-            <ProductRegister
-              user={user}
-              accessToken={accessToken}
-              setAccessToken={setAccessToken}
-            />
-          ),
+          element: <ProductRegister />,
         },
         {
           path: "products/:id",
