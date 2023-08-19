@@ -92,7 +92,9 @@ export default function App() {
         <ForAuth
           isLogin={isLogin}
           setIsLogin={setIsLogin}
+          accessToken={accessToken}
           setAccessToken={setAccessToken}
+          user={user}
           setUser={setUser}
         />
       ),
@@ -104,14 +106,7 @@ export default function App() {
         },
         {
           path: "register",
-          element: (
-            <UserRegister
-              isLogin={isLogin}
-              setIsLogin={setIsLogin}
-              setAccessToken={setAccessToken}
-              setUser={setUser}
-            />
-          ),
+          element: <UserRegister />,
         },
       ],
     },
@@ -123,6 +118,7 @@ export default function App() {
           setIsLogin={setIsLogin}
           accessToken={accessToken}
           setAccessToken={setAccessToken}
+          user={user}
           setUser={setUser}
         />
       ),

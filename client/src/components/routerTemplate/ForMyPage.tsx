@@ -1,4 +1,5 @@
 import { Outlet, useOutletContext } from "react-router-dom";
+import { ContextType } from "context";
 import styled from "styled-components";
 import Header from "../Header";
 import SideBar from "../mypage/SideBar";
@@ -35,48 +36,14 @@ const PageContainer = styled.div`
 
 const userAPI = new UserAPI();
 
-type ForMyPageProps = {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  accessToken: string;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  setUser: React.Dispatch<React.SetStateAction<any>>;
-};
-
-type PointHistory = {
-  title: string;
-  price: number;
-  balance: number;
-  createdAt: number;
-  productId?: string;
-  paymentId?: string;
-};
-
-type User = {
-  _id: string;
-  email: string;
-  nickname: string;
-  image: string;
-  salesList: Array<string>;
-  shoppingList: Array<string>;
-  point: number;
-  pointHistory: Array<PointHistory>;
-};
-
-type ContextType = {
-  userInfo: User;
-  setUserInfo: React.Dispatch<React.SetStateAction<any>>;
-  accessToken: string;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-};
-
 export default function ForMyPage({
   isLogin,
   setIsLogin,
   accessToken,
   setAccessToken,
+  user,
   setUser,
-}: ForMyPageProps) {
+}: ContextType) {
   const [userInfo, setUserInfo] = useState<any>(null);
 
   useEffect(() => {
@@ -114,10 +81,12 @@ export default function ForMyPage({
                 <Outlet
                   context={
                     {
-                      userInfo,
-                      setUserInfo,
+                      isLogin,
+                      setIsLogin,
                       accessToken,
                       setAccessToken,
+                      user,
+                      setUser,
                     } satisfies ContextType
                   }
                 />

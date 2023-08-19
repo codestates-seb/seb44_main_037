@@ -49,7 +49,7 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState<Message>();
   const [text, setText] = useState("");
 
-  const { userInfo, accessToken } = useUser();
+  const { user, accessToken } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +82,7 @@ export default function ChatPage() {
       {
         withCredentials: true,
         extraHeaders: {
-          "user-id": userInfo._id,
+          "user-id": user._id,
         },
       }
     );
@@ -127,7 +127,7 @@ export default function ChatPage() {
 
   const handleButtonClick = async () => {
     const whoIsTalkingTo = findWhoIsTalkingTo(
-      userInfo._id,
+      user._id,
       showingChatRoom.seller,
       showingChatRoom.buyer
     );
@@ -179,7 +179,7 @@ export default function ChatPage() {
               <S.Title>
                 {
                   findWhoIsTalkingTo(
-                    userInfo._id,
+                    user._id,
                     showingChatRoom.seller,
                     showingChatRoom.buyer
                   ).nickname
@@ -187,7 +187,7 @@ export default function ChatPage() {
               </S.Title>
               <S.SmallText color="var(--green)">
                 {findBuyer(
-                  userInfo._id,
+                  user._id,
                   showingChatRoom.seller._id,
                   showingChatRoom.buyer._id
                 )}
@@ -207,7 +207,7 @@ export default function ChatPage() {
             </S.LineWrapper>
             <S.MessageBox ref={scrollRef}>
               {showingChatRoom.messages.map((message: any) => (
-                <S.MessageWrapper isMe={message.sender._id === userInfo._id}>
+                <S.MessageWrapper isMe={message.sender._id === user._id}>
                   <S.SpeechBubble key={message._id}>
                     {message.text}
                   </S.SpeechBubble>

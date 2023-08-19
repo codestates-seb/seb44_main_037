@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
+import { ContextType } from "context";
 import styled from "styled-components";
 import { FAILED, OK } from "../../constants/messages";
 import UserAPI from "../../api/user";
@@ -19,44 +20,6 @@ const BodyWrapper = styled.div`
   min-height: 100vh;
 `;
 
-type GeneralProps = {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  accessToken: string;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  user: any;
-  setUser: React.Dispatch<React.SetStateAction<any>>;
-};
-
-type PointHistory = {
-  title: string;
-  price: number;
-  balance: number;
-  createdAt: number;
-  productId?: string;
-  paymentId?: string;
-};
-
-type User = {
-  _id: string;
-  email: string;
-  nickname: string;
-  image: string;
-  salesList: Array<string>;
-  shoppingList: Array<string>;
-  point: number;
-  pointHistory: Array<PointHistory>;
-};
-
-type ContextType = {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  accessToken: string;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
-};
-
 const userAPI = new UserAPI();
 
 export default function General({
@@ -66,7 +29,7 @@ export default function General({
   setAccessToken,
   user,
   setUser,
-}: GeneralProps) {
+}: ContextType) {
   const navigate = useNavigate();
 
   const requestUserData = async (code: string) => {

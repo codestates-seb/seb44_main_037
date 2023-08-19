@@ -1,4 +1,5 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
+import { ContextType } from "context";
 import styled from "styled-components";
 import Header from "../Header";
 
@@ -24,19 +25,14 @@ const PageContainer = styled.div`
   height: 100%;
 `;
 
-type ForAuthProps = {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  setUser: React.Dispatch<React.SetStateAction<any>>;
-};
-
 export default function ForAuth({
   isLogin,
   setIsLogin,
+  accessToken,
   setAccessToken,
+  user,
   setUser,
-}: ForAuthProps) {
+}: ContextType) {
   return (
     <>
       <HeaderWrapper>
@@ -50,10 +46,25 @@ export default function ForAuth({
       <BodyWrapper>
         <Body>
           <PageContainer>
-            <Outlet />
+            <Outlet
+              context={
+                {
+                  isLogin,
+                  setIsLogin,
+                  accessToken,
+                  setAccessToken,
+                  user,
+                  setUser,
+                } satisfies ContextType
+              }
+            />
           </PageContainer>
         </Body>
       </BodyWrapper>
     </>
   );
+}
+
+export function useAuthContext() {
+  return useOutletContext<ContextType>();
 }

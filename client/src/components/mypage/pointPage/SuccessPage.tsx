@@ -20,7 +20,7 @@ export default function SuccessPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [searchParams] = useSearchParams();
 
-  const { userInfo, setUserInfo, accessToken, setAccessToken } = useUser();
+  const { user, setUser, accessToken } = useUser();
 
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ export default function SuccessPage() {
       const response: any = await userAPI.charge(accessToken, body);
 
       if (response.result === OK) {
-        setUserInfo(response.payload.user);
+        setUser(response.payload.user);
         handleSuccess();
       }
 
@@ -71,7 +71,7 @@ export default function SuccessPage() {
           </S.Description>
           <S.Description>
             <div>결제 후 나의 포인트</div>
-            <div>{`${userInfo.point.toLocaleString()}P`}</div>
+            <div>{`${user.point.toLocaleString()}P`}</div>
           </S.Description>
         </S.Wrapper>
       )}
