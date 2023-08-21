@@ -1,52 +1,34 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import * as S from "./UserRegister.style";
 import useInput from "../../hook/useInput";
-
-import UserAPI from "../../api/user";
 import displayAttachedImage from "../../utils/displayAttachedImage";
 import validateRegister from "../../utils/validateRegister";
-import {
-  FAILED_USER_REGISTER,
-  EXCESSIVE_IMAGE_SIZE,
-  INVALID_REQUEST,
-  OK,
-} from "../../constants/messages";
 import exampleImage from "../../assets/images/example_profile.png";
-import { showToast } from "../common/Toast";
-import { ERROR } from "../../constants/toast";
-
 import RegisterInput from "../common/RegisterInput";
 import ProfileImage from "../userRegister/ProfileImage";
-import HalfButton from "../common/HalfButton";
+import ButtonBar from "../userRegister/ButtonBar";
+import { BodyOfRegisterUser } from "userAPI";
+import { Images } from "../../class/Images";
 
-const userAPI = new UserAPI();
+const initialFailureReason = { nickname: "" };
 
-type UserRegisterProps = {
-  isLogin: boolean;
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  setUser: React.Dispatch<React.SetStateAction<any>>;
-};
-
-export default function UserRegister({
-  isLogin,
-  setIsLogin,
-  setAccessToken,
-  setUser,
-}: UserRegisterProps) {
+export default function UserRegister() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [thumbnail, setThumbnail] = useState<any>(exampleImage);
   const [imageFile, setImageFile] = useState<null | File>(null);
-  const [form, onChange, reset, setForm] = useInput({
+  const [form, onChange] = useInput({
     nickname: "",
     email: location.state.email,
   });
-  const [failureReason, setFailureReason] = useState({
-    nickname: "",
-  });
+  const [failureReason, setFailureReason] = useState(initialFailureReason);
+
+  const requestBody: BodyOfRegisterUser = {
+    nickname: form.nickname,
+    image: imageFile,
+    email: form.email,
+  };
 
   const validateForm = () => {
     const { isValid, failureReason } = validateRegister(form);
@@ -56,57 +38,20 @@ export default function UserRegister({
       return false;
     }
 
-    setFailureReason({ ...failureReason, nickname: "" });
+    setFailureReason(initialFailureReason);
     return true;
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    if (!e.target.files?.length) return;
 
-    if (!files?.length) return;
+    const { fileList, checkSizeError } = new Images(e.target.files);
+    const isValidate = checkSizeError();
 
-    const maxSize = 0.5 * 1024 * 1024;
-    const fileSize = files[0].size;
-
-    if (fileSize > maxSize) {
-      showToast({ type: ERROR, message: EXCESSIVE_IMAGE_SIZE });
-      return;
+    if (isValidate) {
+      displayAttachedImage(e, setThumbnail);
+      setImageFile(fileList[0]);
     }
-
-    displayAttachedImage(e, setThumbnail);
-    setImageFile(files[0]);
-  };
-
-  const handleSubmitClick = async () => {
-    const isValidForm = validateForm();
-
-    if (isValidForm && imageFile && form.email) {
-      const body = {
-        nickname: form.nickname,
-        image: imageFile,
-        email: form.email,
-      };
-
-      const response: any = await userAPI.register(body);
-
-      if (response.result === OK) {
-        setIsLogin(true);
-        setAccessToken(response.payload.accessToken);
-        setUser(response.payload.user);
-
-        navigate("/");
-        return;
-      }
-
-      showToast({ type: ERROR, message: FAILED_USER_REGISTER });
-      return;
-    }
-
-    showToast({ type: ERROR, message: INVALID_REQUEST });
-  };
-
-  const handleCancelClick = () => {
-    navigate("/");
   };
 
   return (
@@ -136,18 +81,7 @@ export default function UserRegister({
             size="20rem"
             isReadOnly={true}
           />
-          <S.ButtonBar>
-            <HalfButton
-              name="회원가입"
-              onClick={handleSubmitClick}
-              backgroundColor="var(--green)"
-            />
-            <HalfButton
-              name="취소하기"
-              onClick={handleCancelClick}
-              backgroundColor="var(--red)"
-            />
-          </S.ButtonBar>
+          <ButtonBar validateForm={validateForm} requestBody={requestBody} />
         </S.AlignWrapper>
       </S.Container>
     </>

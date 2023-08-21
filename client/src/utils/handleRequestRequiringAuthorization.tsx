@@ -12,7 +12,7 @@ const handleRequestRequiringAuthorization = async (
   body?: any
 ) => {
   if (res.status === 401 && res.message === TOKEN_REISSUED) {
-    const accessToken: any = res.headers.get("token");
+    const accessToken = res.headers.get("token");
     const response = await memberFunc(accessToken, body);
 
     if (response.result === OK) {
