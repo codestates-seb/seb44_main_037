@@ -2,8 +2,6 @@ import { useState } from "react";
 import * as S from "./ProductRegister.style";
 import { IMAGE_GUIDE } from "../../constants/info";
 import displayAttachedImages from "../../utils/displayAttachedImages";
-import { showToast } from "../common/Toast";
-import { ERROR } from "../../constants/toast";
 import InfoText from "../common/InfoText";
 import ProductImage from "../productRegister/ProductImage";
 import { Images } from "../../class/Images";
@@ -18,25 +16,15 @@ export default function ImageAttachmentSection({
   const [displayingImages, setDisplayingImages] = useState([]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return false;
+    if (!e.target.files?.length) return;
 
-    const { sizeErrorMessage, fileList } = new Images(e.target.files);
-    const isValidate = checkSizeError(sizeErrorMessage);
+    const { fileList, checkSizeError } = new Images(e.target.files);
+    const isValidate = checkSizeError();
 
     if (isValidate) {
       attachImages(fileList);
       displayImages(fileList);
     }
-  };
-
-  const checkSizeError = (errorMessage: string | null) => {
-    if (errorMessage) {
-      showToast({ type: ERROR, message: errorMessage });
-
-      return false;
-    }
-
-    return true;
   };
 
   const attachImages = (files: Array<File>) => {
